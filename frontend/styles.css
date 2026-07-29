@@ -43,7 +43,7 @@ body {
 }
 
 /* wa-card only auto-shows its header/footer parts when it detects content in
-   the plain "header"/"footer" slots; we only use "header-actions"/"footer-actions",
+   the plain "header"/"footer" slots; our footer only uses "footer-actions",
    so force both parts visible via ::part instead of relying on that detection. */
 .task-card::part(header),
 .task-card::part(footer) {
