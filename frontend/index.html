@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>axi-taskboard</title>
+
+  <!-- Web Awesome (CDN) -->
+  <link rel="stylesheet" href="https://ka-f.webawesome.com/webawesome@3.10.0/styles/themes/default.css">
+  <link rel="stylesheet" href="https://ka-f.webawesome.com/webawesome@3.10.0/styles/native.css">
+  <script type="module" src="https://ka-f.webawesome.com/webawesome@3.10.0/webawesome.loader.js"></script>
+
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="board-header">
+    <h1>axi-taskboard</h1>
+    <wa-button id="new-task-btn" appearance="filled" variant="brand">+ New Task</wa-button>
+  </header>
+
+  <main class="board" id="board">
+    <section class="column" data-status="open">
+      <h2>Open</h2>
+      <div class="column-tasks" id="column-open"></div>
+    </section>
+    <section class="column" data-status="in_progress">
+      <h2>In Progress</h2>
+      <div class="column-tasks" id="column-in_progress"></div>
+    </section>
+    <section class="column" data-status="done">
+      <h2>Done</h2>
+      <div class="column-tasks" id="column-done"></div>
+    </section>
+  </main>
+
+  <!-- Create/edit task dialog -->
+  <wa-dialog id="task-dialog" label="Task">
+    <form id="task-form">
+      <wa-input id="task-title" label="Title" required></wa-input>
+      <wa-input id="task-body" label="Description"></wa-input>
+    </form>
+    <wa-button slot="footer" data-dialog="close">Cancel</wa-button>
+    <wa-button slot="footer" variant="brand" id="task-save-btn">Save</wa-button>
+  </wa-dialog>
+
+  <!-- wa-toast is a Web Awesome Pro-only component (404s on the free CDN);
+       app.js falls back to a wa-callout-based notification when it isn't defined. -->
+  <wa-toast id="toast"></wa-toast>
+  <wa-callout id="callout-fallback" class="toast-fallback" variant="success" style="display:none;"></wa-callout>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>
