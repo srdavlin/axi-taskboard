@@ -6,12 +6,8 @@ This file is the project's committed home for project-intrinsic agent knowledge:
 
 ## Project goal
 
-axi-taskboard grows into a full web-based scheduling app: Web Awesome
-frontend, PostgreSQL backend, Kubernetes deployment. The Task Board data
-model in `spec/taskboard.spec.md` is phase one of that arc, not the final
-shape. There is no bespoke `task-axi` CLI — data access goes through `pg-axi`
-directly (or a thin backend service if needed). See `spec/taskboard.spec.md`
-for the full spec, the 10 AXI principles, and the toolset this build stays
+See `spec/taskboard.spec.md` for the full spec: target architecture, data
+access approach, the 10 AXI principles, and the toolset this build stays
 inside.
 
 ## Phase plan
