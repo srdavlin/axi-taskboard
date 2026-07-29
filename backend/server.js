@@ -19,6 +19,10 @@ const pool = new pg.Pool({
     'postgresql://axitaskboard:axitaskboard-dev-only@localhost:5432/axitaskboard',
 });
 
+pool.on('error', (err) => {
+  console.error('Unexpected error on idle Postgres client', err);
+});
+
 const STATUSES = ['open', 'in_progress', 'done'];
 const MIME = { '.html': 'text/html', '.js': 'text/javascript', '.css': 'text/css' };
 
@@ -87,6 +91,19 @@ async function serveStatic(req, res, pathname) {
 }
 
 const server = http.createServer(async (req, res) => {
+  try {
+    await handleRequest(req, res);
+  } catch (err) {
+    console.error('Request handler error', err);
+    if (!res.headersSent) {
+      sendJson(res, 500, { error: 'internal server error' });
+    } else {
+      res.end();
+    }
+  }
+});
+
+async function handleRequest(req, res) {
   const url = new URL(req.url, `http://${req.headers.host}`);
   const { pathname } = url;
 
@@ -181,7 +198,7 @@ const server = http.createServer(async (req, res) => {
 
   res.writeHead(405);
   res.end();
-});
+}
 
 server.listen(PORT, () => {
   console.log(`axi-taskboard backend listening on http://localhost:${PORT}`);
