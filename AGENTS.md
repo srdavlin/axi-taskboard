@@ -38,7 +38,8 @@ phase's own brief carries its detail.
    framework, just `node:http` + the `pg` client (see "Backend service" below).
    `frontend/app.js` now calls `/api/tasks` instead of using mock data;
    `moveTask`/`saveTask`/`deleteTask` all refetch-and-rerender after mutating.
-4. Source-control/review workflow via `gh-axi` (branch/PR flow already in use through no-mistakes; call out anything axi-taskboard-specific).
+4. Source-control/review workflow via `gh-axi` (done): documented the
+   branch/PR conventions already in use — see "Source control & review" below.
 5. Browser testing via `chrome-devtools-axi`.
 6. Containerization via `docker-axi`.
 7. Kubernetes deployment via `kubernetes-axi`.
@@ -81,6 +82,22 @@ DATABASE_URL=postgresql://axitaskboard:axitaskboard-dev-only@localhost:5432/axit
 
 Then open `http://localhost:3001/`. `PORT` and `DATABASE_URL` are both
 overridable env vars (see top of `server.js` for defaults).
+
+## Source control & review
+
+Branch/PR flow via `gh-axi` has been in continuous use since phase 0 (PRs
+#6-#9); this section makes the convention explicit rather than leaving it
+implicit in habit.
+
+- **Branch naming**: `fm/<task-id>`, one branch per phase/task.
+- **PR body**: `.github/pull_request_template.md` captures the Intent/
+  Verification structure already used organically in PRs #6-#9 — what the
+  change does and why, then how it was confirmed to work.
+- **Review/merge gate**: this repo has no CI configured (tracked separately
+  by issue #5, out of scope until that phase is dispatched). Until then, the
+  actual gate is a captain's manual PR review and merge — there is no
+  automated check blocking a bad merge, so treat manual review as load-
+  bearing, not a formality.
 
 ## Sharp edges
 
