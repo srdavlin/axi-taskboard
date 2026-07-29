@@ -1,0 +1,17 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: axi-taskboard-postgres
+    restart: unless-stopped
+    environment:
+      # Dev-only default credentials. Never use these values outside local development.
+      POSTGRES_USER: axitaskboard
+      POSTGRES_PASSWORD: axitaskboard-dev-only
+      POSTGRES_DB: axitaskboard
+    ports:
+      - "5432:5432"
+    volumes:
+      - axi-taskboard-pgdata:/var/lib/postgresql/data
+
+volumes:
+  axi-taskboard-pgdata:
