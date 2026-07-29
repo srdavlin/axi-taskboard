@@ -1,18 +1,14 @@
-// Phase 2 scaffold: static/mock data only. No backend wiring (see AGENTS.md phase plan).
+// Phase 3: wired to the backend API (see AGENTS.md phase plan) — fetches
+// tasks from Postgres via /api/tasks and refetches after every mutation.
 
 const STATUSES = ['open', 'in_progress', 'done'];
 const STATUS_LABELS = { open: 'Open', in_progress: 'In Progress', done: 'Done' };
 const PRIORITY_LABELS = { 0: 'Low', 1: 'Medium', 2: 'High', 3: 'Urgent' };
 const PRIORITY_VARIANTS = { 0: 'neutral', 1: 'brand', 2: 'warning', 3: 'danger' };
 
-let nextId = 6;
-let tasks = [
-  { id: 1, title: 'Set up dev environment', body: 'Install pg-axi and verify DATABASE_URL.', status: 'open', priority: 1, created_at: '2026-07-20T09:00:00Z', updated_at: '2026-07-20T09:00:00Z' },
-  { id: 2, title: 'Design task schema', body: 'Match spec data model: title, body, status, priority.', status: 'open', priority: 2, created_at: '2026-07-21T10:00:00Z', updated_at: '2026-07-21T10:00:00Z' },
-  { id: 3, title: 'Apply sql/schema.sql', body: 'Run via pg-axi query --file sql/schema.sql --execute.', status: 'in_progress', priority: 2, created_at: '2026-07-22T11:00:00Z', updated_at: '2026-07-24T14:00:00Z' },
-  { id: 4, title: 'Scaffold Web Awesome frontend', body: 'Three-column board with mock data.', status: 'in_progress', priority: 3, created_at: '2026-07-23T12:00:00Z', updated_at: '2026-07-29T08:00:00Z' },
-  { id: 5, title: 'Write project spec', body: 'Document architecture and AXI principles.', status: 'done', priority: 1, created_at: '2026-07-18T09:00:00Z', updated_at: '2026-07-19T09:00:00Z' },
-];
+const API_BASE = '/api/tasks';
+
+let tasks = [];
 
 const toast = document.getElementById('toast');
 const calloutFallback = document.getElementById('callout-fallback');
@@ -49,6 +45,31 @@ function nextStatus(status) {
 function prevStatus(status) {
   const i = STATUSES.indexOf(status);
   return i > 0 ? STATUSES[i - 1] : null;
+}
+
+async function apiRequest(url, options) {
+  const res = await fetch(url, options);
+  if (!res.ok) {
+    let message = `Request failed (${res.status})`;
+    try {
+      const body = await res.json();
+      if (body.error) message = body.error;
+    } catch {
+      // ignore non-JSON error bodies
+    }
+    throw new Error(message);
+  }
+  if (res.status === 204) return null;
+  return res.json();
+}
+
+async function loadTasks() {
+  try {
+    tasks = await apiRequest(API_BASE);
+    renderBoard();
+  } catch (err) {
+    notify(`Failed to load tasks: ${err.message}`, 'danger');
+  }
 }
 
 function renderBoard() {
@@ -97,6 +118,14 @@ function renderCard(task) {
   editBtn.addEventListener('click', () => openDialog(task));
   card.appendChild(editBtn);
 
+  const deleteBtn = document.createElement('wa-button');
+  deleteBtn.slot = 'footer-actions';
+  deleteBtn.setAttribute('appearance', 'outlined');
+  deleteBtn.setAttribute('variant', 'danger');
+  deleteBtn.textContent = 'Delete';
+  deleteBtn.addEventListener('click', () => deleteTask(task));
+  card.appendChild(deleteBtn);
+
   const prev = prevStatus(task.status);
   if (prev) {
     const backBtn = document.createElement('wa-button');
@@ -120,13 +149,30 @@ function renderCard(task) {
   return card;
 }
 
-function moveTask(id, status) {
+async function moveTask(id, status) {
   const task = tasks.find((t) => t.id === id);
   if (!task) return;
-  task.status = status;
-  task.updated_at = new Date().toISOString();
-  renderBoard();
-  notify(`"${task.title}" moved to ${STATUS_LABELS[status]}`);
+  try {
+    await apiRequest(`${API_BASE}/${id}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ status }),
+    });
+    notify(`"${task.title}" moved to ${STATUS_LABELS[status]}`);
+    await loadTasks();
+  } catch (err) {
+    notify(`Failed to move task: ${err.message}`, 'danger');
+  }
+}
+
+async function deleteTask(task) {
+  try {
+    await apiRequest(`${API_BASE}/${task.id}`, { method: 'DELETE' });
+    notify(`"${task.title}" deleted`);
+    await loadTasks();
+  } catch (err) {
+    notify(`Failed to delete task: ${err.message}`, 'danger');
+  }
 }
 
 function openDialog(task) {
@@ -137,39 +183,38 @@ function openDialog(task) {
   dialog.open = true;
 }
 
-function saveTask() {
+async function saveTask() {
   const title = titleInput.value.trim();
   if (!title) {
     notify('Title is required', 'danger');
     return;
   }
   const body = bodyInput.value.trim();
-  const now = new Date().toISOString();
 
-  if (editingId) {
-    const task = tasks.find((t) => t.id === editingId);
-    task.title = title;
-    task.body = body;
-    task.updated_at = now;
-    notify(`"${title}" updated`);
-  } else {
-    tasks.push({
-      id: nextId++,
-      title,
-      body,
-      status: 'open',
-      priority: 0,
-      created_at: now,
-      updated_at: now,
-    });
-    notify(`"${title}" created`);
+  try {
+    if (editingId) {
+      await apiRequest(`${API_BASE}/${editingId}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ title, body }),
+      });
+      notify(`"${title}" updated`);
+    } else {
+      await apiRequest(API_BASE, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ title, body }),
+      });
+      notify(`"${title}" created`);
+    }
+    dialog.open = false;
+    await loadTasks();
+  } catch (err) {
+    notify(`Failed to save task: ${err.message}`, 'danger');
   }
-
-  dialog.open = false;
-  renderBoard();
 }
 
 newTaskBtn.addEventListener('click', () => openDialog(null));
 saveBtn.addEventListener('click', saveTask);
 
-renderBoard();
+loadTasks();
