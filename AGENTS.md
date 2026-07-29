@@ -34,7 +34,10 @@ phase's own brief carries its detail.
    force them visible via `::part(header)`/`::part(footer)` CSS (see `styles.css`)
    rather than the `with-header`/`with-footer` attributes, which the component
    overwrites on its own detection.
-3. Wire frontend to data; decide and implement the real backend shape.
+3. Wire frontend to data (done): thin Node backend at `backend/server.js` — no
+   framework, just `node:http` + the `pg` client (see "Backend service" below).
+   `frontend/app.js` now calls `/api/tasks` instead of using mock data;
+   `moveTask`/`saveTask`/`deleteTask` all refetch-and-rerender after mutating.
 4. Source-control/review workflow via `gh-axi` (branch/PR flow already in use through no-mistakes; call out anything axi-taskboard-specific).
 5. Browser testing via `chrome-devtools-axi`.
 6. Containerization via `docker-axi`.
@@ -54,6 +57,30 @@ Schema is applied via `pg-axi query --file sql/schema.sql --execute` (`sql/schem
 is the checked-in source of truth; `pg-axi` is not a migration tool, so re-run this
 file by hand — it's idempotent — after any schema change instead of expecting
 version tracking).
+
+## Backend service
+
+`backend/server.js` is the thin HTTP service between the static frontend and
+Postgres (spec: browsers can't reach Postgres directly, and the frontend has
+no build step). It's a single file — `node:http` + the `pg` client, no
+framework/ORM — serving both `frontend/` as static files and a JSON API under
+`/api/tasks` (GET/POST/PATCH/DELETE, PATCH accepts any of
+title/body/status/priority) on one origin, so there's no CORS to configure.
+`pg-axi` remains the agent-facing tool for schema/admin work (phase 1); the
+backend uses a normal `pg` Pool for its own request path — see the phase 3
+brief for why those don't conflict.
+
+Run locally (after `docker compose up -d`, schema already applied — see
+"Local dev database" above):
+
+```
+cd backend && npm install   # first time only
+DATABASE_URL=postgresql://axitaskboard:axitaskboard-dev-only@localhost:5432/axitaskboard \
+  node server.js
+```
+
+Then open `http://localhost:3001/`. `PORT` and `DATABASE_URL` are both
+overridable env vars (see top of `server.js` for defaults).
 
 ## Sharp edges
 
