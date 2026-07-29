@@ -27,6 +27,12 @@ phase's own brief carries its detail.
 8. Quota-aware multi-harness dispatch practice via `quota-axi`.
 9. Human review practice via `lavish-axi`.
 
+## Sharp edges
+
+- `pg-axi` is unavailable in this environment as of phase 0: no local binary,
+  and `npx -y pg-axi` 404s (not published to this npm registry). Phase 1
+  needs a working install path or credential before it can make pg-axi calls.
+
 ## Maintaining this file
 
 Keep this file for knowledge useful to almost every future agent session in this project.
