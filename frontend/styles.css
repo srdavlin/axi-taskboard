@@ -1,0 +1,82 @@
+body {
+  margin: 0;
+  padding: 1.5rem;
+  font-family: var(--wa-font-family-body, system-ui, sans-serif);
+}
+
+.board-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+}
+
+.board {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+
+.column {
+  background: var(--wa-color-surface-lowered, #f4f4f5);
+  border-radius: var(--wa-border-radius-l, 8px);
+  padding: 1rem;
+  min-height: 200px;
+}
+
+.column h2 {
+  margin-top: 0;
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--wa-color-text-quiet, #666);
+}
+
+.column-tasks {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.task-card {
+  display: block;
+}
+
+/* wa-card only auto-shows its header/footer parts when it detects content in
+   the plain "header"/"footer" slots; our footer only uses "footer-actions",
+   so force both parts visible via ::part instead of relying on that detection. */
+.task-card::part(header),
+.task-card::part(footer) {
+  display: flex !important;
+}
+
+.task-card h3 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.task-card p {
+  margin: 0.5rem 0;
+  font-size: 0.9rem;
+  color: var(--wa-color-text-quiet, #444);
+}
+
+.empty-state {
+  color: var(--wa-color-text-quiet, #999);
+  font-style: italic;
+  font-size: 0.9rem;
+}
+
+.toast-fallback {
+  position: fixed;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  max-width: 320px;
+  z-index: 1000;
+}
+
+#task-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}

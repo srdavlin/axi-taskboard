@@ -21,7 +21,19 @@ phase's own brief carries its detail.
    Schema is `sql/schema.sql` (single `tasks` table, matches spec's data model).
    Future phases: no boards/columns table exists yet — status is a `tasks.status`
    check constraint, not a separate entity — add one only if the spec grows to need it.
-2. Web Awesome frontend scaffold (wa-card, wa-badge, wa-button, wa-input, wa-dialog, wa-toast; three-column board).
+2. Web Awesome frontend scaffold (done): three-column static/mock board at
+   `frontend/index.html` (+ `app.js`, `styles.css`) — no backend wiring yet.
+   Web Awesome is brought in via CDN only (no bundler/npm package): see
+   `frontend/index.html` `<head>` for the `webawesome@3.10.0` `default.css` +
+   `webawesome.loader.js` tags (autoloads components on demand). `wa-toast` is
+   a Web Awesome Pro-only component and 404s on the free CDN — `app.js`'s
+   `notify()` detects this (`customElements.get('wa-toast')`) and falls back to
+   a `wa-callout` banner; keep that fallback if `wa-toast` stays unlicensed.
+   Sharp edge: `wa-card`'s header/footer parts only auto-show for content in the
+   plain `header`/`footer` slots, not `header-actions`/`footer-actions` alone —
+   force them visible via `::part(header)`/`::part(footer)` CSS (see `styles.css`)
+   rather than the `with-header`/`with-footer` attributes, which the component
+   overwrites on its own detection.
 3. Wire frontend to data; decide and implement the real backend shape.
 4. Source-control/review workflow via `gh-axi` (branch/PR flow already in use through no-mistakes; call out anything axi-taskboard-specific).
 5. Browser testing via `chrome-devtools-axi`.
