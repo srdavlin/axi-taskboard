@@ -8,15 +8,10 @@ plus two edge cases: the empty-title client-side validation, and the
 
 ## Prerequisites
 
-The app stack must already be running (see AGENTS.md "Local dev database" /
-"Backend service"):
-
-```
-docker compose up -d
-cd backend && npm install
-DATABASE_URL=postgresql://axitaskboard:axitaskboard-dev-only@localhost:5432/axitaskboard \
-  node server.js
-```
+The app stack must already be running — `docker compose up -d` now brings up
+both Postgres and the backend (see AGENTS.md "Containerization"); see
+AGENTS.md "Backend service" for the alternative of running the backend
+directly on the host instead.
 
 The script also requires the board to be empty (`curl localhost:3001/api/tasks`
 returns `[]`) — it refuses to run otherwise, since it asserts on task counts.
