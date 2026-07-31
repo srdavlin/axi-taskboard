@@ -40,7 +40,9 @@ phase's own brief carries its detail.
    `moveTask`/`saveTask`/`deleteTask` all refetch-and-rerender after mutating.
 4. Source-control/review workflow via `gh-axi` (done): documented the
    branch/PR conventions already in use — see "Source control & review" below.
-5. Browser testing via `chrome-devtools-axi`.
+5. Browser testing via `chrome-devtools-axi` (done): repeatable golden-path +
+   edge-case coverage at `tests/browser/golden-path.sh` — see "Browser
+   testing" below and `tests/browser/README.md`.
 6. Containerization via `docker-axi`.
 7. Kubernetes deployment via `kubernetes-axi`.
 8. Quota-aware multi-harness dispatch practice via `quota-axi`.
@@ -99,6 +101,16 @@ implicit in habit.
   automated check blocking a bad merge, so treat manual review as load-
   bearing, not a formality.
 
+## Browser testing
+
+`tests/browser/golden-path.sh` drives the live app end-to-end through
+`chrome-devtools-axi` (create/move/edit/delete plus two edge cases) and
+asserts every mutation against `/api/tasks`, not just DOM/optimistic state.
+See `tests/browser/README.md` for prerequisites and how to run it — it needs
+the stack already up (see "Local dev database" / "Backend service" above)
+and an empty board, and it downloads/launches its own headless Chrome if none
+is already listening on its debug port, so it needs no system Chrome install.
+
 ## Sharp edges
 
 - `pg-axi`'s own client-facing commands (`psql`, `pg_dump`, `pg_isready`, etc.) need
@@ -106,6 +118,15 @@ implicit in habit.
   available via `brew install libpq` (linuxbrew, keg-only — add
   `/home/linuxbrew/.linuxbrew/opt/libpq/bin` to PATH to use them). If a fresh machine
   lacks both brew and these tools, `pg-axi doctor` will surface exactly what's missing.
+- This host has no system Chrome (`chrome-devtools-axi open` fails looking for
+  `/opt/google/chrome/chrome`), so `chrome-devtools-axi` needs
+  `CHROME_DEVTOOLS_AXI_BROWSER_URL` pointed at a Chrome you launch yourself
+  (see `tests/browser/README.md` for the `@puppeteer/browsers` + headless
+  launch pattern). Two more sharp edges hit writing that script: pass refs to
+  `click`/`fill` as `@g<gen>:<id>` (not the bare `uid=g<gen>:<id>` a snapshot
+  line shows), and Web Awesome custom elements upgrade asynchronously so a
+  snapshot taken immediately after navigation/mutation needs a short wait
+  before its `button`/`textbox` roles are reliable.
 
 ## Maintaining this file
 
