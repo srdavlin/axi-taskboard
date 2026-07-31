@@ -41,8 +41,7 @@ spec:
             initialDelaySeconds: 5
             periodSeconds: 5
           livenessProbe:
-            httpGet:
-              path: /api/tasks
+            tcpSocket:
               port: 3001
             initialDelaySeconds: 10
             periodSeconds: 10
