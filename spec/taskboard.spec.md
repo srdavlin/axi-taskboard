@@ -56,7 +56,7 @@ This build stays inside the AXI tool ecosystem:
   `quota-axi` (harness/model quota awareness).
 - Community tools relevant to this project's phases: `pg-axi` (PostgreSQL data
   access, from the data-layer phase onward), `docker-axi` (containerization,
-  once that phase starts), `kubernetes-axi` (deployment, once that phase
-  starts).
+  once that phase starts), `kubernetes-axi` (deployment, from the Kubernetes
+  phase onward).
 
 No custom AXI-compliant CLI is built as a goal in itself.
