@@ -43,7 +43,8 @@ phase's own brief carries its detail.
 5. Browser testing via `chrome-devtools-axi` (done): repeatable golden-path +
    edge-case coverage at `tests/browser/golden-path.sh` — see "Browser
    testing" below and `tests/browser/README.md`.
-6. Containerization via `docker-axi`.
+6. Containerization via `docker-axi` (done): `backend/Dockerfile` +
+   `docker-compose.yml`'s `backend` service — see "Containerization" below.
 7. Kubernetes deployment via `kubernetes-axi`.
 8. Quota-aware multi-harness dispatch practice via `quota-axi`.
 9. Human review practice via `lavish-axi`.
@@ -110,6 +111,25 @@ See `tests/browser/README.md` for prerequisites and how to run it — it needs
 the stack already up (see "Local dev database" / "Backend service" above)
 and an empty board, and it downloads/launches its own headless Chrome if none
 is already listening on its debug port, so it needs no system Chrome install.
+
+## Containerization
+
+The whole app (backend + Postgres) now starts with one command:
+`docker compose up -d` (or `docker-axi apply --target compose:docker-compose.yml
+--environment local-dev --execute`, the `docker-axi`-guarded equivalent).
+`backend/Dockerfile` builds the `backend` compose service from a `node:24-alpine`
+base with build context set to the repo root (`context: .` in
+`docker-compose.yml`, since the image needs both `backend/` and `frontend/`);
+it runs the exact same `node server.js` entrypoint as local dev, just inside
+the container. The `backend` service's `DATABASE_URL` points at the `postgres`
+service by compose network name (not `localhost`) and `depends_on` gates
+startup on Postgres's healthcheck. Same host port as before (`3001`) — open
+`http://localhost:3001/` after `up`. The Postgres volume
+(`axi-taskboard-pgdata`) already persisted across restarts before this phase;
+now verified to also persist across the backend container being rebuilt/
+recreated alongside it. `tests/browser/golden-path.sh` runs unchanged against
+this containerized stack (same port, same empty-board precondition — see
+"Browser testing" above).
 
 ## Sharp edges
 
