@@ -45,7 +45,9 @@ phase's own brief carries its detail.
    testing" below and `tests/browser/README.md`.
 6. Containerization via `docker-axi` (done): `backend/Dockerfile` +
    `docker-compose.yml`'s `backend` service — see "Containerization" below.
-7. Kubernetes deployment via `kubernetes-axi`.
+7. Kubernetes deployment via `kubernetes-axi` (done): plain YAML manifests
+   under `k8s/` deploy backend + Postgres to a local `kind` cluster — see
+   "Kubernetes deployment" below.
 8. Quota-aware multi-harness dispatch practice via `quota-axi`.
 9. Human review practice via `lavish-axi`.
 
@@ -130,6 +132,48 @@ now verified to also persist across the backend container being rebuilt/
 recreated alongside it. `tests/browser/golden-path.sh` runs unchanged against
 this containerized stack (same port, same empty-board precondition — see
 "Browser testing" above).
+
+## Kubernetes deployment
+
+Plain YAML manifests under `k8s/` (no Kustomize/Helm — the app is simple
+enough that `kubernetes-axi discover`/`recommend --goal local-dev` pointed at
+a manifests dir as the right fit) deploy backend + Postgres to a local `kind`
+cluster, mirroring `docker-compose.yml`'s topology: `k8s/postgres.yaml`
+(PVC + StatefulSet + Service, dev-only creds from `k8s/postgres-secret.yaml`
+rather than plaintext env), `k8s/backend.yaml` (Deployment + Service, image
+`axi-taskboard-backend:local` with `imagePullPolicy: Never` since it's loaded
+into the node directly, not pulled from a registry).
+
+Cold start against the existing `kind-kind-cluster` context:
+
+```
+docker build -t axi-taskboard-backend:local -f backend/Dockerfile .
+kind load docker-image axi-taskboard-backend:local --name kind-cluster
+kubernetes-axi apply --target manifests-dir:k8s --environment local-dev --execute
+```
+
+Schema is not baked into the Postgres image (same posture as local dev/
+compose — see "Local dev database" above): after the postgres pod is Ready,
+apply it once via `kubectl cp sql/schema.sql axi-taskboard-postgres-0:/tmp/schema.sql`
+then `kubernetes-axi exec --pod axi-taskboard-postgres-0 --cmd psql -U axitaskboard
+-d axitaskboard -f /tmp/schema.sql --execute`. The backend pod will
+crashloop with `relation "tasks" does not exist` until this runs — expected,
+not a bug.
+
+Reach the app via `kubernetes-axi port-forward --resource svc/axi-taskboard-backend
+--ports <local>:3001 --timeout <n> --execute` (bounded/non-interactive — pick
+a `--timeout` covering how long you need it, e.g. 600s for a full browser-test
+run), then open `http://localhost:<local>/`. Note the compose stack (see
+"Containerization") also binds host `3001`/`5432` — use a different local
+port (e.g. `3101`) if it's running alongside the cluster.
+
+Verified: `tests/browser/golden-path.sh` passes unchanged against the
+cluster-hosted app with `BASE_URL` pointed at the port-forward (same
+empty-board precondition as always). Data survives a Postgres pod
+delete/recreate (`kubernetes-axi delete --kind pod --name
+axi-taskboard-postgres-0 --confirm axi-taskboard-postgres-0 --execute`) —
+the StatefulSet's PVC is what makes that durable, same role the
+`axi-taskboard-pgdata` compose volume plays locally.
 
 ## Sharp edges
 
