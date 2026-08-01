@@ -48,7 +48,9 @@ phase's own brief carries its detail.
 7. Kubernetes deployment via `kubernetes-axi` (done): plain YAML manifests
    under `k8s/` deploy backend + Postgres to a local `kind` cluster — see
    "Kubernetes deployment" below.
-8. Quota-aware multi-harness dispatch practice via `quota-axi`.
+8. Quota-aware multi-harness dispatch practice via `quota-axi` (done): no
+   app-code deliverable — see "Quota-aware dispatch" below and
+   `docs/quota-dispatch.md`.
 9. Human review practice via `lavish-axi`.
 
 ## Local dev database
@@ -174,6 +176,15 @@ delete/recreate (`kubernetes-axi delete --kind pod --name
 axi-taskboard-postgres-0 --confirm axi-taskboard-postgres-0 --execute`) —
 the StatefulSet's PVC is what makes that durable, same role the
 `axi-taskboard-pgdata` compose volume plays locally.
+
+## Quota-aware dispatch
+
+`quota-axi` reports per-provider quota windows (Claude, Codex, Cursor,
+Copilot, Grok, Kimi) so a multi-harness supervisor can route to whichever
+candidate has real headroom instead of guessing — see
+`docs/quota-dispatch.md` for what each field means, this build's verified
+crewmate harness set against what `quota-axi` can report on, and a worked
+example from this session's real output.
 
 ## Sharp edges
 
