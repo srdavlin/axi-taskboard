@@ -51,7 +51,10 @@ phase's own brief carries its detail.
 8. Quota-aware multi-harness dispatch practice via `quota-axi` (done): no
    app-code deliverable — see "Quota-aware dispatch" below and
    `docs/quota-dispatch.md`.
-9. Human review practice via `lavish-axi`.
+9. Human review practice via `lavish-axi` (done): no app-code deliverable —
+   see "Human review practice" below and `docs/human-review-practice.md`.
+   This is the last phase in the plan — the guided build's phase plan is
+   complete.
 
 ## Local dev database
 
@@ -185,6 +188,15 @@ candidate has real headroom instead of guessing — see
 `docs/quota-dispatch.md` for what each field means, this build's verified
 crewmate harness set against what `quota-axi` can report on, and a worked
 example from this session's real output.
+
+## Human review practice
+
+`lavish-axi` turns an HTML artifact into a live human review surface
+(annotate, queue prompts, `lavish-axi poll` for feedback) — see
+`docs/human-review-practice.md` for the playbook survey, the real build
+retrospective at `.lavish/phase9-build-retrospective.html`, and the standing
+rule that a one-shot crewmate opens/confirms an artifact but never blocks on
+`poll` (that's a supervisor-level action).
 
 ## Sharp edges
 
