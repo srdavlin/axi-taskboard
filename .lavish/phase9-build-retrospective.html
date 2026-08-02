@@ -1,0 +1,284 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>axi-taskboard — Guided Build Retrospective</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/daisyui@5.5.19/daisyui.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/daisyui@5.5.19/themes.css">
+<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4.2.4/dist/index.global.js"></script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  :where(.grid, .flex) > * { min-width: 0; }
+  :where(p, h1, h2, h3, h4, li, td, th, .badge) { overflow-wrap: anywhere; }
+</style>
+</head>
+<body>
+<div data-theme="luxury">
+<main class="mx-auto max-w-5xl p-6 lg:p-10 space-y-10">
+
+  <section class="hero bg-base-200 rounded-box">
+    <div class="hero-content text-center py-10">
+      <div class="max-w-2xl space-y-3">
+        <div class="badge badge-soft badge-primary">Phase 9 · lavish-axi practice</div>
+        <h1 class="text-4xl font-bold">axi-taskboard: Guided Build Retrospective</h1>
+        <p class="text-base-content/70">
+          Ten phases, dispatched one at a time, each verified before the next — a
+          Postgres-backed task board built end to end while exercising a fixed
+          AXI toolset (<code>pg-axi</code>, <code>gh-axi</code>,
+          <code>chrome-devtools-axi</code>, <code>docker-axi</code>,
+          <code>kubernetes-axi</code>, <code>quota-axi</code>, <code>lavish-axi</code>).
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="stats stats-vertical sm:stats-horizontal shadow w-full bg-base-100">
+    <div class="stat">
+      <div class="stat-title">Phases in plan</div>
+      <div class="stat-value text-primary">10</div>
+      <div class="stat-desc">0 through 9, this one closes the arc</div>
+    </div>
+    <div class="stat">
+      <div class="stat-title">PRs merged</div>
+      <div class="stat-value">9</div>
+      <div class="stat-desc">#6 – #14, all by srdavlin</div>
+    </div>
+    <div class="stat">
+      <div class="stat-title">Review-loop catches</div>
+      <div class="stat-value">6</div>
+      <div class="stat-desc">no-mistakes findings fixed pre-merge</div>
+    </div>
+    <div class="stat">
+      <div class="stat-title">Deferred</div>
+      <div class="stat-value text-warning">1</div>
+      <div class="stat-desc">issue #5, CI pipeline — no phase addresses it</div>
+    </div>
+  </section>
+
+  <section class="space-y-3">
+    <h2 class="text-2xl font-bold">Phase pipeline</h2>
+    <p class="text-base-content/70 text-sm">
+      Each phase built directly on the last: data layer before UI, UI before
+      wiring, wiring before workflow/testing/ops phases, and the final two
+      phases are process practice rather than app code.
+    </p>
+    <div class="mermaid">
+flowchart TD
+    P0["Phase 0 — Baseline<br/>spec + phase plan"] --> P1["Phase 1 — Data layer<br/>pg-axi / sql/schema.sql"]
+    P1 --> P2["Phase 2 — Web Awesome frontend<br/>static/mock board"]
+    P2 --> P3["Phase 3 — Wire frontend to data<br/>backend/server.js"]
+    P3 --> P4["Phase 4 — Source-control workflow<br/>gh-axi conventions"]
+    P4 --> P5["Phase 5 — Browser testing<br/>chrome-devtools-axi"]
+    P5 --> P6["Phase 6 — Containerization<br/>docker-axi"]
+    P6 --> P7["Phase 7 — Kubernetes deploy<br/>kubernetes-axi"]
+    P7 --> P8["Phase 8 — Quota-aware dispatch<br/>quota-axi (no app code)"]
+    P8 --> P9["Phase 9 — Human review practice<br/>lavish-axi (no app code)"]
+    </div>
+  </section>
+
+  <section class="space-y-3">
+    <h2 class="text-2xl font-bold">Phase detail</h2>
+    <ul class="timeline timeline-vertical">
+
+      <li>
+        <div class="timeline-start font-mono text-sm">PR #6</div>
+        <div class="timeline-middle"><div class="badge badge-primary badge-sm"></div></div>
+        <div class="timeline-end timeline-box w-full">
+          <b>Phase 0 — Baseline.</b> Corrected spec scope and recorded the
+          guided 10-phase plan in AGENTS.md; verified the environment before
+          any build work started.
+        </div>
+        <hr/>
+      </li>
+
+      <li>
+        <hr/>
+        <div class="timeline-start font-mono text-sm">PR #7</div>
+        <div class="timeline-middle"><div class="badge badge-primary badge-sm"></div></div>
+        <div class="timeline-end timeline-box w-full">
+          <b>Phase 1 — Data layer.</b> PostgreSQL schema via <code>pg-axi</code>:
+          a single <code>tasks</code> table (<code>sql/schema.sql</code>) with
+          status as a check constraint, not a separate boards/columns entity.
+          <div class="mt-1 text-xs text-base-content/60">Review-loop catch: dev Postgres port bound to localhost only.</div>
+        </div>
+        <hr/>
+      </li>
+
+      <li>
+        <hr/>
+        <div class="timeline-start font-mono text-sm">PR #8</div>
+        <div class="timeline-middle"><div class="badge badge-primary badge-sm"></div></div>
+        <div class="timeline-end timeline-box w-full">
+          <b>Phase 2 — Web Awesome frontend scaffold.</b> Static/mock
+          three-column board (<code>frontend/index.html</code>, <code>app.js</code>,
+          <code>styles.css</code>), Web Awesome via CDN only, no backend wiring yet.
+          <div class="mt-1 text-xs text-base-content/60">Review-loop catch: inaccurate wa-card slot comment fixed.</div>
+        </div>
+        <hr/>
+      </li>
+
+      <li>
+        <hr/>
+        <div class="timeline-start font-mono text-sm">PR #9</div>
+        <div class="timeline-middle"><div class="badge badge-primary badge-sm"></div></div>
+        <div class="timeline-end timeline-box w-full">
+          <b>Phase 3 — Wire frontend to data.</b> Thin <code>backend/server.js</code>
+          (plain <code>node:http</code> + <code>pg</code>, no framework) serving
+          both the static frontend and a JSON <code>/api/tasks</code> API on one origin.
+          <div class="mt-1 text-xs text-base-content/60">Review-loop catch: added try/catch + pool error handler to prevent backend crashes.</div>
+        </div>
+        <hr/>
+      </li>
+
+      <li>
+        <hr/>
+        <div class="timeline-start font-mono text-sm">PR #10</div>
+        <div class="timeline-middle"><div class="badge badge-primary badge-sm"></div></div>
+        <div class="timeline-end timeline-box w-full">
+          <b>Phase 4 — Source-control &amp; review workflow.</b> Documented the
+          <code>gh-axi</code> branch/PR conventions already in organic use since
+          phase 0 — <code>fm/&lt;task-id&gt;</code> branches, PR template with
+          Intent/Verification, manual review as the real (only) merge gate.
+        </div>
+        <hr/>
+      </li>
+
+      <li>
+        <hr/>
+        <div class="timeline-start font-mono text-sm">PR #11</div>
+        <div class="timeline-middle"><div class="badge badge-primary badge-sm"></div></div>
+        <div class="timeline-end timeline-box w-full">
+          <b>Phase 5 — Browser testing.</b> <code>tests/browser/golden-path.sh</code>
+          drives the live app through <code>chrome-devtools-axi</code>
+          (create/move/edit/delete + 2 edge cases), asserting every mutation
+          against <code>/api/tasks</code>, not just DOM state.
+        </div>
+        <hr/>
+      </li>
+
+      <li>
+        <hr/>
+        <div class="timeline-start font-mono text-sm">PR #12</div>
+        <div class="timeline-middle"><div class="badge badge-primary badge-sm"></div></div>
+        <div class="timeline-end timeline-box w-full">
+          <b>Phase 6 — Containerization.</b> <code>backend/Dockerfile</code>
+          added to <code>docker-compose.yml</code>; whole app now starts with
+          <code>docker compose up -d</code>, same host port 3001.
+          <div class="mt-1 text-xs text-base-content/60">Review-loop catch: browser-test README pointed at the containerized single-command startup.</div>
+        </div>
+        <hr/>
+      </li>
+
+      <li>
+        <hr/>
+        <div class="timeline-start font-mono text-sm">PR #13</div>
+        <div class="timeline-middle"><div class="badge badge-primary badge-sm"></div></div>
+        <div class="timeline-end timeline-box w-full">
+          <b>Phase 7 — Kubernetes deployment.</b> Plain YAML manifests under
+          <code>k8s/</code> (no Kustomize/Helm) deploy backend + Postgres to a
+          local <code>kind</code> cluster via <code>kubernetes-axi</code>,
+          mirroring the compose topology.
+          <div class="mt-1 text-xs text-base-content/60">Review-loop catches: livenessProbe switched to TCP socket check; stale kubernetes-axi phase-status note fixed in spec doc.</div>
+        </div>
+        <hr/>
+      </li>
+
+      <li>
+        <hr/>
+        <div class="timeline-start font-mono text-sm">PR #14</div>
+        <div class="timeline-middle"><div class="badge badge-secondary badge-sm"></div></div>
+        <div class="timeline-end timeline-box w-full">
+          <b>Phase 8 — Quota-aware dispatch practice.</b> No app code —
+          <code>docs/quota-dispatch.md</code> documents how <code>quota-axi</code>
+          reports per-provider quota windows so a supervisor can route to
+          whichever harness has real headroom.
+        </div>
+        <hr/>
+      </li>
+
+      <li>
+        <div class="timeline-start font-mono text-sm">this phase</div>
+        <div class="timeline-middle"><div class="badge badge-secondary badge-sm"></div></div>
+        <div class="timeline-end timeline-box w-full">
+          <b>Phase 9 — Human review practice (current).</b> No app code — this
+          artifact itself is the practice: a real <code>lavish-axi</code>
+          review surface built from this repo's own history, opened and
+          confirmed rendering. See <code>docs/human-review-practice.md</code>.
+        </div>
+      </li>
+
+    </ul>
+  </section>
+
+  <section class="space-y-3">
+    <h2 class="text-2xl font-bold">Merged PRs</h2>
+    <div class="overflow-x-auto rounded-box border border-base-content/10 bg-base-100">
+      <table class="table table-zebra">
+        <thead><tr><th>#</th><th>Title</th><th>Phase</th><th>State</th></tr></thead>
+        <tbody>
+          <tr><td>6</td><td>docs: correct spec scope and record guided-build phase plan</td><td>0</td><td><span class="badge badge-success badge-soft">merged</span></td></tr>
+          <tr><td>7</td><td>chore(db): add PostgreSQL data layer via pg-axi</td><td>1</td><td><span class="badge badge-success badge-soft">merged</span></td></tr>
+          <tr><td>8</td><td>feat(frontend): scaffold Web Awesome three-column task board UI</td><td>2</td><td><span class="badge badge-success badge-soft">merged</span></td></tr>
+          <tr><td>9</td><td>feat(backend): wire Web Awesome frontend to Postgres via thin Node API</td><td>3</td><td><span class="badge badge-success badge-soft">merged</span></td></tr>
+          <tr><td>10</td><td>docs: document source-control/review workflow and add PR template</td><td>4</td><td><span class="badge badge-success badge-soft">merged</span></td></tr>
+          <tr><td>11</td><td>test: add repeatable browser test coverage via chrome-devtools-axi</td><td>5</td><td><span class="badge badge-success badge-soft">merged</span></td></tr>
+          <tr><td>12</td><td>build(backend): containerize backend service and add to docker-compose stack</td><td>6</td><td><span class="badge badge-success badge-soft">merged</span></td></tr>
+          <tr><td>13</td><td>build(k8s): deploy backend and Postgres to local kind cluster</td><td>7</td><td><span class="badge badge-success badge-soft">merged</span></td></tr>
+          <tr><td>14</td><td>docs: document quota-aware multi-harness dispatch practice</td><td>8</td><td><span class="badge badge-success badge-soft">merged</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="alert alert-soft alert-info">
+    <span>
+      <b>Gate note:</b> this repo has no CI configured (issue
+      <a class="link link-primary" href="https://github.com/srdavlin/axi-taskboard/issues/5">#5</a>,
+      deliberately out of scope for every phase in this plan). Every merge above
+      went through manual <code>gh-axi</code> PR review as the actual gate —
+      the 6 review-loop catches listed above are real findings that gate
+      caught, not hypothetical ones.
+    </span>
+  </section>
+
+  <section class="alert alert-soft alert-warning">
+    <span>
+      <b>Scope of this artifact:</b> this page is a one-shot crewmate build —
+      it was opened and confirmed to render, but no <code>lavish-axi poll</code>
+      review loop ran against it. Soliciting real feedback on this artifact is
+      a supervisor-level action, not something this task blocks on.
+    </span>
+  </section>
+
+</main>
+</div>
+
+<script type="module">
+  import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11.15.0/dist/mermaid.esm.min.mjs";
+  const darkQuery = window.matchMedia("(prefers-color-scheme: dark)");
+  const paint = document.createElement("canvas").getContext("2d");
+  function toRgba(color) {
+    paint.clearRect(0, 0, 1, 1);
+    paint.fillStyle = "#000";
+    paint.fillStyle = color;
+    paint.fillRect(0, 0, 1, 1);
+    return paint.getImageData(0, 0, 1, 1).data;
+  }
+  function pageIsDark() {
+    const root = document.documentElement;
+    const [r, g, b, a] = toRgba(getComputedStyle(root).backgroundColor);
+    if (a > 0) return (0.2126 * r + 0.7152 * g + 0.0722 * b) / 255 < 0.5;
+    return darkQuery.matches;
+  }
+  function render() {
+    const theme = pageIsDark() ? "dark" : "default";
+    mermaid.initialize({ startOnLoad: false, theme, securityLevel: "strict" });
+    mermaid.run({ querySelector: ".mermaid" });
+  }
+  if (document.readyState === "complete") render();
+  else window.addEventListener("load", render, { once: true });
+  darkQuery.addEventListener("change", render);
+</script>
+</body>
+</html>
