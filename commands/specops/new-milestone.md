@@ -1,6 +1,6 @@
 ---
 name: specops:new-milestone
-description: 开始新的里程碑周期——更新 PROJECT.md 并路由到需求定义
+description: Start a new milestone cycle — update PROJECT.md and route to requirements definition
 argument-hint: "[milestone name, e.g., 'v1.1 Notifications']"
 allowed-tools:
   - Read
@@ -10,18 +10,18 @@ allowed-tools:
   - AskUserQuestion
 ---
 <objective>
-开始新的里程碑：提问 → 研究（可选）→ 需求 → 路线图。
+Start a new milestone: ask questions → research (optional) → requirements → roadmap.
 
-new-project 的棕地等价物。项目已存在，PROJECT.md 有历史记录。收集"下一步做什么"，更新 PROJECT.md，然后运行需求 → 路线图周期。
+The brownfield equivalent of new-project. The project already exists and PROJECT.md has history. Gather "what to do next," update PROJECT.md, then run the requirements → roadmap cycle.
 
-**创建/更新：**
-- `.planning/PROJECT.md` — 更新为新里程碑目标
-- `.planning/research/` — 领域研究（可选，仅新功能）
-- `.planning/REQUIREMENTS.md` — 此里程碑的范围化需求
-- `.planning/ROADMAP.md` — 阶段结构（继续编号）
-- `.planning/STATE.md` — 为新里程碑重置
+**Creates/updates:**
+- `.planning/PROJECT.md` — updated with the new milestone goal
+- `.planning/research/` — domain research (optional, new features only)
+- `.planning/REQUIREMENTS.md` — scoped requirements for this milestone
+- `.planning/ROADMAP.md` — phase structure (numbering continues)
+- `.planning/STATE.md` — reset for the new milestone
 
-**之后：** `/specops:plan-phase [N]` 开始执行。
+**Afterward:** `/specops:plan-phase [N]` starts execution.
 </objective>
 
 <execution_context>
@@ -33,12 +33,12 @@ new-project 的棕地等价物。项目已存在，PROJECT.md 有历史记录。
 </execution_context>
 
 <context>
-里程碑名称：$ARGUMENTS（可选 - 未提供时会提示）
+Milestone name: $ARGUMENTS (optional — prompted for if not provided)
 
-项目和里程碑上下文文件在工作流内部解析（`init new-milestone`），并通过 `<files_to_read>` 块委托给子代理。
+Project and milestone context files are resolved inside the workflow (`init new-milestone`) and delegated to subagents via `<files_to_read>` blocks.
 </context>
 
 <process>
-端到端执行 @.opencode/workflows/new-milestone.md 中的 new-milestone 工作流。
-保留所有工作流门控（验证、提问、研究、需求、路线图审批、提交）。
+Execute the new-milestone workflow in @.opencode/workflows/new-milestone.md end to end.
+Preserve all workflow gates (validation, questioning, research, requirements, roadmap approval, commit).
 </process>

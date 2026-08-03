@@ -1,21 +1,21 @@
 ---
 name: specops:update
-description: 更新 SpecOps 到最新版本并显示变更日志
+description: Update SpecOps to the latest version and show the changelog
 allowed-tools:
   - Bash
   - AskUserQuestion
 ---
 
 <objective>
-检查 SpecOps 更新，如果可用则安装，并显示变更内容。
+Check for a SpecOps update, install it if available, and show what changed.
 
-路由到 update 工作流，该工作流处理：
-- 版本检测（本地 vs 全局安装）
-- npm 版本检查
-- 变更日志获取和显示
-- 用户确认及全新安装警告
-- 更新执行和缓存清除
-- 重启提醒
+Route to the update workflow, which handles:
+- Version detection (local vs. global install)
+- npm version check
+- Changelog fetching and display
+- User confirmation and clean-install warnings
+- Update execution and cache clearing
+- Restart reminder
 </objective>
 
 <execution_context>
@@ -23,15 +23,15 @@ allowed-tools:
 </execution_context>
 
 <process>
-**遵循 update 工作流**，来自 `@.opencode/workflows/update.md`。
+**Follow the update workflow** at `@.opencode/workflows/update.md`.
 
-该工作流处理所有逻辑，包括：
-1. 已安装版本检测（本地/全局）
-2. 通过 npm 检查最新版本
-3. 版本比较
-4. 变更日志获取和提取
-5. 全新安装警告显示
-6. 用户确认
-7. 更新执行
-8. 缓存清除
+That workflow handles all the logic, including:
+1. Installed version detection (local/global)
+2. Checking the latest version via npm
+3. Version comparison
+4. Changelog fetching and extraction
+5. Clean-install warning display
+6. User confirmation
+7. Update execution
+8. Cache clearing
 </process>

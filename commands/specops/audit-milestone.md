@@ -1,6 +1,6 @@
 ---
 name: specops:audit-milestone
-description: 在归档之前审计里程碑完成情况是否符合原始意图
+description: Audit milestone completion against original intent before archiving
 argument-hint: "[version]"
 allowed-tools:
   - Read
@@ -11,9 +11,9 @@ allowed-tools:
   - Write
 ---
 <objective>
-验证里程碑是否达成了其完成定义。检查需求覆盖率、跨阶段集成和端到端流程。
+Verify that a milestone has met its definition of done. Check requirement coverage, cross-phase integration, and end-to-end flows.
 
-**此命令本身就是编排器。** 读取现有的 VERIFICATION.md 文件（阶段在 execute-phase 期间已验证），汇总技术债务和延迟的缺口，然后生成集成检查器进行跨阶段连接检查。
+**This command is itself the orchestrator.** It reads existing VERIFICATION.md files (phases are verified during execute-phase), rolls up technical debt and deferred gaps, then spawns an integration checker for cross-phase connection checks.
 </objective>
 
 <execution_context>
@@ -21,16 +21,16 @@ allowed-tools:
 </execution_context>
 
 <context>
-版本：$ARGUMENTS（可选 — 默认为当前里程碑）
+Version: $ARGUMENTS (optional — defaults to the current milestone)
 
-核心规划文件在工作流中解析（`init milestone-op`），仅按需加载。
+Core planning files are resolved within the workflow (`init milestone-op`), loaded only as needed.
 
-**已完成的工作：**
+**Completed work:**
 Glob: .planning/phases/*/*-SUMMARY.md
 Glob: .planning/phases/*/*-VERIFICATION.md
 </context>
 
 <process>
-端到端执行 @.opencode/workflows/audit-milestone.md 中的 audit-milestone 工作流。
-保留所有工作流门控（范围确定、验证读取、集成检查、需求覆盖、路由）。
+Execute the audit-milestone workflow in @.opencode/workflows/audit-milestone.md end to end.
+Preserve all workflow gates (scope determination, verification reading, integration checks, requirement coverage, routing).
 </process>

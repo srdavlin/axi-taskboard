@@ -1,6 +1,6 @@
 ---
 name: specops:demand-analyze
-description: 分析用户需求，拆分功能点，生成需求文档
+description: Analyze user requirements, break them into feature points, and generate a requirements document
 argument-hint: "[--auto]"
 allowed-tools:
   - Read
@@ -11,29 +11,29 @@ allowed-tools:
 ---
 
 <context>
-**标志：**
-- `--auto` — 自动模式。直接根据输入的需求进行分析，无需交互。
+**Flags:**
+- `--auto` — Automatic mode. Analyze directly based on the requirements provided, with no interaction.
 
-**输入类型：**
-- 需求文本：直接输入需求描述
-- GitHub 仓库：提供仓库地址，克隆后分析功能
-- 网站：提供网址，抓取并分析功能
+**Input types:**
+- Requirement text: enter a requirements description directly
+- GitHub repository: provide a repo URL, clone it, and analyze its features
+- Website: provide a URL, scrape it, and analyze its features
 </context>
 
 <objective>
-通过需求分析流程处理用户输入：
+Process the user's input through the requirements analysis workflow:
 
-**创建：**
-- `.specops/requirements.md` — 需求分析报告
-- `.specops/demand-analysis.json` — 结构化需求数据
+**Creates:**
+- `.specops/requirements.md` — requirements analysis report
+- `.specops/demand-analysis.json` — structured requirements data
 
-**分析内容：**
-- 需求理解与拆分
-- 功能点提取
-- 优先级排序
-- 依赖关系
+**Analysis covers:**
+- Understanding and breaking down requirements
+- Feature point extraction
+- Priority ranking
+- Dependencies
 
-**此命令之后：** 运行 `/specops:competitor-analyze` 进行竞品分析。
+**After this command:** run `/specops:competitor-analyze` to perform competitor analysis.
 </objective>
 
 <execution_context>
@@ -42,8 +42,8 @@ allowed-tools:
 </execution_context>
 
 <process>
-1. 接收用户输入（需求/仓库/网站）
-2. 调用 demand-analysis skill 进行分析
-3. 拆分功能点，生成需求文档
-4. 更新状态文件 `.specops/state.json`
+1. Receive the user's input (requirement text/repository/website)
+2. Invoke the demand-analysis skill to perform the analysis
+3. Break down feature points and generate the requirements document
+4. Update the state file `.specops/state.json`
 </process>

@@ -1,6 +1,6 @@
 ---
 name: specops:research-phase
-description: 研究如何实现某个阶段（独立命令——通常使用 /specops:plan-phase 代替）
+description: Research how to implement a phase (standalone command — usually use /specops:plan-phase instead)
 argument-hint: "[phase]"
 allowed-tools:
   - Read
@@ -9,71 +9,71 @@ allowed-tools:
 ---
 
 <objective>
-研究如何实现某个阶段。生成带有阶段上下文的 specops-phase-researcher 代理。
+Research how to implement a phase. Spawns a specops-phase-researcher agent with phase context.
 
-**注意：** 这是一个独立的研究命令。对于大多数工作流，使用 `/specops:plan-phase` 会自动集成研究。
+**Note:** This is a standalone research command. For most workflows, `/specops:plan-phase` integrates research automatically.
 
-**使用此命令的场景：**
-- 你想在不规划的情况下先研究
-- 你想在规划完成后重新研究
-- 你需要在决定阶段是否可行之前进行调查
+**When to use this command:**
+- You want to research first, without planning
+- You want to re-research after planning is complete
+- You need to investigate before deciding whether a phase is feasible
 
-**编排器角色：** 解析阶段，对照路线图验证，检查现有研究，收集上下文，生成研究代理，展示结果。
+**Orchestrator role:** Parse the phase, validate it against the roadmap, check for existing research, gather context, spawn the research agent, and present results.
 
-**为什么用子代理：** 研究会快速消耗上下文（WebSearch、Context7 查询、源验证）。调查使用全新的 200k 上下文。主上下文保持精简以便用户交互。
+**Why a subagent:** Research burns through context quickly (WebSearch, Context7 queries, source verification). The investigation gets a fresh 200k context. The main context stays lean for user interaction.
 </objective>
 
 <context>
-阶段编号：$ARGUMENTS（必需）
+Phase number: $ARGUMENTS (required)
 
-在步骤 1 中标准化阶段输入，然后再进行任何目录查找。
+Normalize the phase input in step 1 before doing any directory lookups.
 </context>
 
 <process>
 
-## 0. 初始化上下文
+## 0. Initialize context
 
 ```bash
 INIT=$(node .opencode/bin/specops-tools.cjs init phase-op "$ARGUMENTS")
 ```
 
-从初始化 JSON 中提取：`phase_dir`、`phase_number`、`phase_name`、`phase_found`、`commit_docs`、`has_research`、`state_path`、`requirements_path`、`context_path`、`research_path`。
+Extract from the init JSON: `phase_dir`, `phase_number`, `phase_name`, `phase_found`, `commit_docs`, `has_research`, `state_path`, `requirements_path`, `context_path`, `research_path`.
 
-解析研究员模型：
+Resolve the researcher model:
 ```bash
 RESEARCHER_MODEL=$(node .opencode/bin/specops-tools.cjs resolve-model specops-phase-researcher --raw)
 ```
 
-## 1. 验证阶段
+## 1. Validate the phase
 
 ```bash
 PHASE_INFO=$(node .opencode/bin/specops-tools.cjs roadmap get-phase "${phase_number}")
 ```
 
-**如果 `found` 为 false：** 报错并退出。**如果 `found` 为 true：** 从 JSON 中提取 `phase_number`、`phase_name`、`goal`。
+**If `found` is false:** report an error and exit. **If `found` is true:** extract `phase_number`, `phase_name`, `goal` from the JSON.
 
-## 2. 检查现有研究
+## 2. Check for existing research
 
 ```bash
 ls .planning/phases/${PHASE}-*/RESEARCH.md 2>/dev/null
 ```
 
-**如果存在：** 提供选项：1) 更新研究，2) 查看现有，3) 跳过。等待响应。
+**If it exists:** offer options: 1) update research, 2) view existing, 3) skip. Wait for a response.
 
-**如果不存在：** 继续。
+**If it doesn't exist:** continue.
 
-## 3. 收集阶段上下文
+## 3. Gather phase context
 
-使用 INIT 中的路径（不要在编排器上下文中内联文件内容）：
+Use the paths from INIT (don't inline file contents in the orchestrator context):
 - `requirements_path`
 - `context_path`
 - `state_path`
 
-展示摘要，包含阶段描述和研究员将加载的文件。
+Show a summary including the phase description and the files the researcher will load.
 
-## 4. 生成 specops-phase-researcher 代理
+## 4. Spawn the specops-phase-researcher agent
 
-研究模式：ecosystem（默认）、feasibility、implementation、comparison。
+Research modes: ecosystem (default), feasibility, implementation, comparison.
 
 ```markdown
 <research_type>
@@ -142,15 +142,15 @@ Task(
 )
 ```
 
-## 5. 处理代理返回
+## 5. Handle the agent's response
 
-**`## RESEARCH COMPLETE`：** 显示摘要，提供选项：规划阶段、深入研究、查看完整内容、完成。
+**`## RESEARCH COMPLETE`:** show a summary, offer options: plan the phase, dig deeper, view full content, done.
 
-**`## CHECKPOINT REACHED`：** 向用户展示，获取响应，生成后续代理。
+**`## CHECKPOINT REACHED`:** present it to the user, get a response, spawn a follow-up agent.
 
-**`## RESEARCH INCONCLUSIVE`：** 显示已尝试的内容，提供选项：添加上下文、尝试不同模式、手动。
+**`## RESEARCH INCONCLUSIVE`:** show what was attempted, offer options: add context, try a different mode, do it manually.
 
-## 6. 生成后续代理
+## 6. Spawn a follow-up agent
 
 ```markdown
 <objective>
@@ -181,9 +181,9 @@ Task(
 </process>
 
 <success_criteria>
-- [ ] 阶段已对照路线图验证
-- [ ] 已检查现有研究
-- [ ] 已生成带上下文的 specops-phase-researcher
-- [ ] 正确处理检查点
-- [ ] 用户知道后续步骤
+- [ ] Phase validated against the roadmap
+- [ ] Existing research checked
+- [ ] specops-phase-researcher spawned with context
+- [ ] Checkpoints handled correctly
+- [ ] User knows the next steps
 </success_criteria>

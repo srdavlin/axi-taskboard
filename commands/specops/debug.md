@@ -1,6 +1,6 @@
 ---
 name: specops:debug
-description: 跨上下文重置的系统化调试，带持久状态
+description: Systematic debugging with persistent state across context resets
 argument-hint: [issue description]
 allowed-tools:
   - Read
@@ -10,17 +10,17 @@ allowed-tools:
 ---
 
 <objective>
-使用科学方法和子代理隔离来调试问题。
+Debug an issue using the scientific method and subagent isolation.
 
-**编排器角色：** 收集症状，生成 specops-debugger 代理，处理检查点，生成后续代理。
+**Orchestrator role:** Gather symptoms, spawn the specops-debugger agent, handle checkpoints, spawn follow-up agents.
 
-**为什么用子代理：** 调查会快速消耗上下文（读取文件、形成假设、测试）。每次调查都有全新的 200k 上下文。主上下文保持精简以便用户交互。
+**Why subagents:** Investigation burns through context quickly (reading files, forming hypotheses, testing). Each investigation gets a fresh 200k context. The main context stays lean for user interaction.
 </objective>
 
 <context>
-用户的问题：$ARGUMENTS
+User's issue: $ARGUMENTS
 
-检查活跃会话：
+Check for active sessions:
 ```bash
 ls .planning/debug/*.md 2>/dev/null | grep -v resolved | head -5
 ```
@@ -28,41 +28,41 @@ ls .planning/debug/*.md 2>/dev/null | grep -v resolved | head -5
 
 <process>
 
-## 0. 初始化上下文
+## 0. Initialize context
 
 ```bash
 INIT=$(node .opencode/bin/specops-tools.cjs state load)
 ```
 
-从初始化 JSON 中提取 `commit_docs`。解析调试器模型：
+Extract `commit_docs` from the init JSON. Resolve the debugger model:
 ```bash
 DEBUGGER_MODEL=$(node .opencode/bin/specops-tools.cjs resolve-model specops-debugger --raw)
 ```
 
-## 1. 检查活跃会话
+## 1. Check for active sessions
 
-如果存在活跃会话且没有 $ARGUMENTS：
-- 列出会话及状态、假设、下一步操作
-- 用户选择编号恢复或描述新问题
+If an active session exists and there is no $ARGUMENTS:
+- List sessions with status, hypotheses, and next steps
+- Let the user pick a number to resume, or describe a new issue
 
-如果提供了 $ARGUMENTS 或用户描述了新问题：
-- 继续到症状收集
+If $ARGUMENTS was provided or the user described a new issue:
+- Continue to symptom gathering
 
-## 2. 收集症状（如果是新问题）
+## 2. Gather symptoms (if a new issue)
 
-使用 AskUserQuestion 逐一询问：
+Use AskUserQuestion to ask one at a time:
 
-1. **预期行为** - 应该发生什么？
-2. **实际行为** - 实际发生了什么？
-3. **错误消息** - 有错误吗？（粘贴或描述）
-4. **时间线** - 什么时候开始的？之前正常过吗？
-5. **复现方式** - 如何触发？
+1. **Expected behavior** - What should happen?
+2. **Actual behavior** - What actually happens?
+3. **Error messages** - Are there any errors? (paste or describe)
+4. **Timeline** - When did it start? Did it work before?
+5. **Reproduction** - How do you trigger it?
 
-全部收集后，确认准备开始调查。
+Once all are gathered, confirm ready to start investigating.
 
-## 3. 生成 specops-debugger 代理
+## 3. Spawn the specops-debugger agent
 
-填充提示并生成：
+Fill in the prompt and spawn:
 
 ```markdown
 <objective>
@@ -98,33 +98,33 @@ Task(
 )
 ```
 
-## 4. 处理代理返回
+## 4. Handle the agent's return
 
-**如果 `## ROOT CAUSE FOUND`：**
-- 显示根本原因和证据摘要
-- 提供选项：
-  - "立即修复" - 生成修复子代理
-  - "计划修复" - 建议 /specops:plan-phase --gaps
-  - "手动修复" - 完成
+**If `## ROOT CAUSE FOUND`:**
+- Show the root cause and a summary of the evidence
+- Offer options:
+  - "Fix now" - spawn a fix subagent
+  - "Plan the fix" - suggest /specops:plan-phase --gaps
+  - "Fix manually" - done
 
-**如果 `## CHECKPOINT REACHED`：**
-- 向用户展示检查点详情
-- 获取用户响应
-- 如果检查点类型是 `human-verify`：
-  - 如果用户确认已修复：继续让代理完成/解决/归档
-  - 如果用户报告问题：继续让代理返回调查/修复
-- 生成后续代理（见步骤 5）
+**If `## CHECKPOINT REACHED`:**
+- Show the user the checkpoint details
+- Get the user's response
+- If the checkpoint type is `human-verify`:
+  - If the user confirms it's fixed: let the agent proceed to complete/resolve/archive
+  - If the user reports a problem: let the agent go back to investigating/fixing
+- Spawn a follow-up agent (see step 5)
 
-**如果 `## INVESTIGATION INCONCLUSIVE`：**
-- 显示已检查和排除的内容
-- 提供选项：
-  - "继续调查" - 生成带额外上下文的新代理
-  - "手动调查" - 完成
-  - "添加更多上下文" - 收集更多症状，再次生成
+**If `## INVESTIGATION INCONCLUSIVE`:**
+- Show what was checked and ruled out
+- Offer options:
+  - "Keep investigating" - spawn a new agent with additional context
+  - "Investigate manually" - done
+  - "Add more context" - gather more symptoms, spawn again
 
-## 5. 生成后续代理（检查点之后）
+## 5. Spawn a follow-up agent (after a checkpoint)
 
-当用户响应检查点时，生成新代理：
+When the user responds to a checkpoint, spawn a new agent:
 
 ```markdown
 <objective>
@@ -159,9 +159,9 @@ Task(
 </process>
 
 <success_criteria>
-- [ ] 已检查活跃会话
-- [ ] 已收集症状（如果是新问题）
-- [ ] 已生成带上下文的 specops-debugger
-- [ ] 正确处理检查点
-- [ ] 修复前确认根本原因
+- [ ] Checked for active sessions
+- [ ] Gathered symptoms (if a new issue)
+- [ ] Spawned specops-debugger with context
+- [ ] Handled checkpoints correctly
+- [ ] Confirmed root cause before fixing
 </success_criteria>

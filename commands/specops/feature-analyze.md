@@ -1,7 +1,7 @@
 ---
 name: specops:feature-analyze
-description: 功能点搜索，分析开源实现，生成功能地图
-argument-hint: "[--query <功能点>]"
+description: Search for feature points, analyze open-source implementations, and generate a feature map
+argument-hint: "[--query <feature point>]"
 allowed-tools:
   - Read
   - Bash
@@ -11,27 +11,27 @@ allowed-tools:
 ---
 
 <context>
-**标志：**
-- `--query` — 指定功能点搜索关键词
+**Flags:**
+- `--query` — specify the feature-point search keyword
 
-**输入：**
-- 上游竞品分析结果
-- 或直接输入功能点描述
+**Input:**
+- Upstream competitor analysis results
+- Or a directly-entered feature point description
 </context>
 
 <objective>
-通过功能分析流程：
+Run the feature analysis flow:
 
-**创建：**
-- `.specops/feature-map.md` — 功能地图
+**Creates:**
+- `.specops/feature-map.md` — feature map
 
-**分析内容：**
-- 调用功能搜索 API
-- 分析搜索结果
-- 匹配开源实现
-- 评估可行性
+**Analysis covers:**
+- Calling the feature search API
+- Analyzing search results
+- Matching open-source implementations
+- Assessing feasibility
 
-**此命令之后：** 运行 `/specops:tech-select` 进行技术选型。
+**After this command:** run `/specops:tech-select` to perform technology selection.
 </objective>
 
 <execution_context>
@@ -39,8 +39,8 @@ allowed-tools:
 </execution_context>
 
 <process>
-1. 接收竞品分析结果
-2. 调用 feature-search skill 进行功能搜索
-3. 分析开源实现，生成功能地图
-4. 更新状态文件
+1. Receive the competitor analysis results
+2. Call the feature-search skill to perform the feature search
+3. Analyze open-source implementations and generate the feature map
+4. Update the status file
 </process>

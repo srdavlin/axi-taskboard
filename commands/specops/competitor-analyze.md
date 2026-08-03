@@ -1,7 +1,7 @@
 ---
 name: specops:competitor-analyze
-description: 搜索竞品，分析功能，生成竞品报告
-argument-hint: "[--query <关键词>]"
+description: Search for competitors, analyze their features, and generate a competitor report
+argument-hint: "[--query <keywords>]"
 allowed-tools:
   - Read
   - Bash
@@ -11,27 +11,27 @@ allowed-tools:
 ---
 
 <context>
-**标志：**
-- `--query` — 指定搜索关键词
+**Flags:**
+- `--query` — specify search keywords
 
-**输入：**
-- 上游需求分析结果
-- 或直接输入竞品关键词
+**Input:**
+- Upstream requirements analysis results
+- Or directly-entered competitor keywords
 </context>
 
 <objective>
-通过竞品分析流程：
+Run the competitor analysis flow:
 
-**创建：**
-- `.specops/competitor-report.md` — 竞品分析报告
+**Creates:**
+- `.specops/competitor-report.md` — competitor analysis report
 
-**分析内容：**
-- 关键词拆分（中文 + 英文）
-- Web 搜索竞品
-- GitHub 搜索相关项目
-- 竞品功能对比
+**Analysis covers:**
+- Keyword splitting (Chinese + English)
+- Web search for competitors
+- GitHub search for related projects
+- Competitor feature comparison
 
-**此命令之后：** 运行 `/specops:feature-analyze` 进行功能分析。
+**After this command:** run `/specops:feature-analyze` to perform feature analysis.
 </objective>
 
 <execution_context>
@@ -39,8 +39,8 @@ allowed-tools:
 </execution_context>
 
 <process>
-1. 接收需求分析结果
-2. 调用 competitor-search skill 进行搜索
-3. 分析竞品功能，生成报告
-4. 更新状态文件
+1. Receive the requirements analysis results
+2. Call the competitor-search skill to perform the search
+3. Analyze competitor features and generate the report
+4. Update the status file
 </process>

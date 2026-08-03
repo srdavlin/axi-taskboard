@@ -1,7 +1,7 @@
 ---
 name: specops:full-pipeline
-description: 完整流程：需求分析 → 竞品分析 → 功能分析 → 技术选型
-argument-hint: "<输入类型> [输入内容]"
+description: Full pipeline — requirements analysis → competitor analysis → feature analysis → technology selection
+argument-hint: "<input-type> [input-content]"
 allowed-tools:
   - Read
   - Bash
@@ -11,32 +11,32 @@ allowed-tools:
 ---
 
 <context>
-**输入类型：**
-- `requirement` — 需求文本
-- `repository` — GitHub 仓库地址
-- `website` — 网站 URL
+**Input types:**
+- `requirement` — requirement text
+- `repository` — GitHub repository URL
+- `website` — website URL
 
-**示例：**
-- `/specops:full-pipeline requirement 我想做一个博客系统`
+**Examples:**
+- `/specops:full-pipeline requirement I want to build a blog system`
 - `/specops:full-pipeline repository https://github.com/facebook/react`
 - `/specops:full-pipeline website https://notion.so`
 </context>
 
 <objective>
-执行完整的 4 阶段流程：
+Run the complete 4-stage pipeline:
 
-**阶段：**
-1. 需求分析 → 生成 REQUIREMENTS.md
-2. 竞品分析 → 生成 COMPETITOR_REPORT.md
-3. 功能分析 → 生成 FEATURE_MAP.md
-4. 技术选型 → 生成 TECH_SELECTION.md + ROADMAP.md
+**Stages:**
+1. Requirements analysis → generates REQUIREMENTS.md
+2. Competitor analysis → generates COMPETITOR_REPORT.md
+3. Feature analysis → generates FEATURE_MAP.md
+4. Technology selection → generates TECH_SELECTION.md + ROADMAP.md
 
-**最终产出：**
-- 完整的需求分析报告
-- 竞品分析报告
-- 功能地图
-- 技术选型报告
-- 实施路线图
+**Final deliverables:**
+- Complete requirements analysis report
+- Competitor analysis report
+- Feature map
+- Technology selection report
+- Implementation roadmap
 </objective>
 
 <execution_context>
@@ -47,12 +47,12 @@ allowed-tools:
 </execution_context>
 
 <process>
-1. 接收输入，判断类型
-2. 阶段 1：需求分析
-3. 阶段 2：竞品分析
-4. 阶段 3：功能分析
-5. 阶段 4：技术选型
-6. 生成所有产出文档
+1. Receive the input and determine its type
+2. Stage 1: requirements analysis
+3. Stage 2: competitor analysis
+4. Stage 3: feature analysis
+5. Stage 4: technology selection
+6. Generate all deliverable documents
 
-每个阶段更新状态文件 `.specops/state.json`
+Each stage updates the state file `.specops/state.json`
 </process>

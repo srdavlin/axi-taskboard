@@ -214,6 +214,14 @@ rule that a one-shot crewmate opens/confirms an artifact but never blocks on
   line shows), and Web Awesome custom elements upgrade asynchronously so a
   snapshot taken immediately after navigation/mutation needs a short wait
   before its `button`/`textbox` roles are reliable.
+- `commands/specops/*.md` was translated by hand from Chinese to English
+  (this repo's first commit picked it up verbatim via `npx specops`, an
+  npm package that ships Chinese-only command templates — no English
+  variant, no locale flag). This is unrelated to the English-language
+  `specops` *skill* (`JarvusInnovations/specops` on GitHub, tracked in
+  `skills-lock.json`), which is fine as-is. Re-running the npm package's
+  init/update against this repo will silently reintroduce Chinese content —
+  if that happens, translate again by hand; there's no flag that fixes it.
 
 ## Maintaining this file
 
