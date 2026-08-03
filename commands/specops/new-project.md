@@ -1,6 +1,6 @@
 ---
 name: specops:new-project
-description: 通过深度上下文收集和 PROJECT.md 初始化新项目
+description: Initialize a new project through deep context gathering and PROJECT.md
 argument-hint: "[--auto]"
 allowed-tools:
   - Read
@@ -10,22 +10,22 @@ allowed-tools:
   - AskUserQuestion
 ---
 <context>
-**标志：**
-- `--auto` — 自动模式。配置问题之后，无需进一步交互即运行研究 → 需求 → 路线图。期望通过 @ 引用提供想法文档。
+**Flags:**
+- `--auto` — automatic mode. After the setup questions, runs research → requirements → roadmap with no further interaction. Expects an idea document to be provided via an @ reference.
 </context>
 
 <objective>
-通过统一流程初始化新项目：提问 → 研究（可选）→ 需求 → 路线图。
+Initialize a new project through a unified flow: questions → research (optional) → requirements → roadmap.
 
-**创建：**
-- `.planning/PROJECT.md` — 项目上下文
-- `.planning/config.json` — 工作流偏好
-- `.planning/research/` — 领域研究（可选）
-- `.planning/REQUIREMENTS.md` — 范围化需求
-- `.planning/ROADMAP.md` — 阶段结构
-- `.planning/STATE.md` — 项目记忆
+**Creates:**
+- `.planning/PROJECT.md` — project context
+- `.planning/config.json` — workflow preferences
+- `.planning/research/` — domain research (optional)
+- `.planning/REQUIREMENTS.md` — scoped requirements
+- `.planning/ROADMAP.md` — phase structure
+- `.planning/STATE.md` — project memory
 
-**此命令之后：** 运行 `/specops:plan-phase 1` 开始执行。
+**After this command:** run `/specops:plan-phase 1` to start executing.
 </objective>
 
 <execution_context>
@@ -37,6 +37,6 @@ allowed-tools:
 </execution_context>
 
 <process>
-端到端执行 @.opencode/workflows/new-project.md 中的 new-project 工作流。
-保留所有工作流门控（验证、审批、提交、路由）。
+Execute the new-project workflow in @.opencode/workflows/new-project.md end to end.
+Preserve all workflow gates (verification, approval, commit, routing).
 </process>

@@ -1,6 +1,6 @@
 ---
 name: specops:progress
-description: 检查项目进度，显示上下文，并路由到下一个操作（执行或规划）
+description: Check project progress, show context, and route to the next action (execute or plan)
 allowed-tools:
   - Read
   - Bash
@@ -9,9 +9,9 @@ allowed-tools:
   - SlashCommand
 ---
 <objective>
-检查项目进度，总结最近的工作和接下来的内容，然后智能路由到下一个操作——执行现有计划或创建下一个计划。
+Check project progress, summarize recent work and what's next, then intelligently route to the next action — executing an existing plan or creating the next one.
 
-在继续工作之前提供态势感知。
+Provide situational awareness before continuing work.
 </objective>
 
 <execution_context>
@@ -19,6 +19,6 @@ allowed-tools:
 </execution_context>
 
 <process>
-端到端执行 @.opencode/workflows/progress.md 中的 progress 工作流。
-保留所有路由逻辑（路由 A 到 F）和边缘情况处理。
+Execute the progress workflow in @.opencode/workflows/progress.md end to end.
+Preserve all routing logic (routes A through F) and edge-case handling.
 </process>

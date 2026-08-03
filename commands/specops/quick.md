@@ -1,6 +1,6 @@
 ---
 name: specops:quick
-description: 使用 SpecOps 保障执行快速任务（原子提交、状态追踪）但跳过可选 agent
+description: Execute a quick task with SpecOps guarantees (atomic commits, state tracking) but skip optional agents
 argument-hint: "[--full]"
 allowed-tools:
   - Read
@@ -13,16 +13,16 @@ allowed-tools:
   - AskUserQuestion
 ---
 <objective>
-执行小型临时任务，带有 SpecOps 保障（原子提交、STATE.md 追踪）。
+Execute a small ad-hoc task with SpecOps guarantees (atomic commits, STATE.md tracking).
 
-快速模式是相同系统的简短路径：
-- 生成 specops-planner（快速模式）+ specops-executor
-- 快速任务存放在 `.planning/quick/` 中，与规划阶段分开
-- 更新 STATE.md "快速任务完成" 表格（不是 ROADMAP.md）
+Quick mode is a short path through the same system:
+- Spawns specops-planner (quick mode) + specops-executor
+- Quick tasks live in `.planning/quick/`, separate from planned phases
+- Updates the STATE.md "Quick Tasks Completed" table (not ROADMAP.md)
 
-**默认：** 跳过研究、计划检查器、验证器。适用于你明确知道要做什么的场景。
+**Default:** skips research, the plan checker, and the verifier. Suited to cases where you already know exactly what to do.
 
-**`--full` 标志：** 启用计划检查（最多 2 次迭代）和执行后验证。适用于想要质量保障但不需要完整里程碑流程的场景。
+**`--full` flag:** enables plan checking (up to 2 iterations) and post-execution verification. Suited to cases where you want quality guarantees without the full milestone process.
 </objective>
 
 <execution_context>
@@ -32,10 +32,10 @@ allowed-tools:
 <context>
 $ARGUMENTS
 
-上下文文件在工作流内部通过 `init quick` 解析，并通过 `<files_to_read>` 块委托。
+Context files are resolved inside the workflow via `init quick` and delegated via `<files_to_read>` blocks.
 </context>
 
 <process>
-端到端执行 @.opencode/workflows/quick.md 中的快速工作流。
-保留所有工作流门控（验证、任务描述、规划、执行、状态更新、提交）。
+Execute the quick workflow in @.opencode/workflows/quick.md end to end.
+Preserve all workflow gates (verification, task description, planning, execution, state updates, commit).
 </process>

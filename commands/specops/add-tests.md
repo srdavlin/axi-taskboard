@@ -1,6 +1,6 @@
 ---
 name: specops:add-tests
-description: 根据 UAT 标准和实现为已完成的阶段生成测试
+description: Generate tests for a completed phase based on UAT criteria and the implementation
 argument-hint: "<phase> [additional instructions]"
 allowed-tools:
   - Read
@@ -12,16 +12,16 @@ allowed-tools:
   - Task
   - AskUserQuestion
 argument-instructions: |
-  将参数解析为阶段编号（整数、小数或字母后缀），加上可选的自由文本指令。
-  示例：/specops:add-tests 12
-  示例：/specops:add-tests 12 focus on edge cases in the pricing module
+  Parse the argument as a phase number (integer, decimal, or letter suffix), plus optional free-text instructions.
+  Example: /specops:add-tests 12
+  Example: /specops:add-tests 12 focus on edge cases in the pricing module
 ---
 <objective>
-为已完成的阶段生成单元测试和 E2E 测试，使用其 SUMMARY.md、CONTEXT.md 和 VERIFICATION.md 作为规格说明。
+Generate unit tests and E2E tests for a completed phase, using its SUMMARY.md, CONTEXT.md, and VERIFICATION.md as the spec.
 
-分析实现文件，将它们分类为 TDD（单元测试）、E2E（浏览器测试）或 Skip 类别，向用户展示测试计划以获取批准，然后按照 RED-GREEN 规范生成测试。
+Analyze the implementation files, classify them into TDD (unit tests), E2E (browser tests), or Skip categories, show the user the test plan for approval, then generate tests following the RED-GREEN convention.
 
-输出：测试文件以消息 `test(phase-{N}): add unit and E2E tests from add-tests command` 提交
+Output: test files committed with the message `test(phase-{N}): add unit and E2E tests from add-tests command`
 </objective>
 
 <execution_context>
@@ -29,13 +29,13 @@ argument-instructions: |
 </execution_context>
 
 <context>
-阶段：$ARGUMENTS
+Phase: $ARGUMENTS
 
 @.planning/STATE.md
 @.planning/ROADMAP.md
 </context>
 
 <process>
-端到端执行 @.opencode/workflows/add-tests.md 中的 add-tests 工作流。
-保留所有工作流门控（分类审批、测试计划审批、RED-GREEN 验证、缺口报告）。
+Execute the add-tests workflow in @.opencode/workflows/add-tests.md end to end.
+Preserve all workflow gates (classification approval, test plan approval, RED-GREEN verification, gap reporting).
 </process>

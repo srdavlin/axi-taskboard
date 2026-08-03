@@ -1,6 +1,6 @@
 ---
 name: specops:add-phase
-description: 在路线图中当前里程碑的末尾添加阶段
+description: Add a phase to the end of the current milestone in the roadmap
 argument-hint: <description>
 allowed-tools:
   - Read
@@ -9,13 +9,13 @@ allowed-tools:
 ---
 
 <objective>
-在路线图中当前里程碑的末尾添加一个新的整数阶段。
+Add a new integer phase to the end of the current milestone in the roadmap.
 
-路由到 add-phase 工作流，该工作流处理：
-- 阶段编号计算（下一个顺序整数）
-- 目录创建及 slug 生成
-- 路线图结构更新
-- STATE.md 路线图演进追踪
+Routes to the add-phase workflow, which handles:
+- Phase number calculation (next sequential integer)
+- Directory creation and slug generation
+- Roadmap structure updates
+- STATE.md roadmap-evolution tracking
 </objective>
 
 <execution_context>
@@ -23,21 +23,21 @@ allowed-tools:
 </execution_context>
 
 <context>
-参数：$ARGUMENTS（阶段描述）
+Argument: $ARGUMENTS (phase description)
 
-路线图和状态在工作流中通过 `init phase-op` 和定向工具调用解析。
+The roadmap and state are resolved inside the workflow via `init phase-op` and targeted tool calls.
 </context>
 
 <process>
-**遵循 add-phase 工作流**，来自 `@.opencode/workflows/add-phase.md`。
+**Follow the add-phase workflow**, from `@.opencode/workflows/add-phase.md`.
 
-该工作流处理所有逻辑，包括：
-1. 参数解析和验证
-2. 路线图存在性检查
-3. 当前里程碑识别
-4. 下一个阶段编号计算（忽略小数）
-5. 从描述生成 slug
-6. 阶段目录创建
-7. 路线图条目插入
-8. STATE.md 更新
+That workflow handles all the logic, including:
+1. Argument parsing and validation
+2. Roadmap existence check
+3. Current-milestone identification
+4. Next-phase-number calculation (ignoring decimals)
+5. Slug generation from the description
+6. Phase directory creation
+7. Roadmap entry insertion
+8. STATE.md update
 </process>

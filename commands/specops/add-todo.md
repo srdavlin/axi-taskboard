@@ -1,6 +1,6 @@
 ---
 name: specops:add-todo
-description: 从当前对话上下文中捕获想法或任务作为待办事项
+description: Capture an idea or task from the current conversation context as a to-do item
 argument-hint: [optional description]
 allowed-tools:
   - Read
@@ -10,16 +10,16 @@ allowed-tools:
 ---
 
 <objective>
-将 SpecOps 会话中浮现的想法、任务或问题捕获为结构化的待办事项，供后续处理。
+Capture ideas, tasks, or issues that surface during a SpecOps session as structured to-do items for later handling.
 
-路由到 add-todo 工作流，该工作流处理：
-- 目录结构创建
-- 从参数或对话中提取内容
-- 从文件路径推断领域
-- 重复检测和解决
-- 创建带 frontmatter 的待办文件
-- STATE.md 更新
-- Git 提交
+Routes to the add-todo workflow, which handles:
+- Directory structure creation
+- Extracting content from arguments or the conversation
+- Inferring the domain from file paths
+- Duplicate detection and resolution
+- Creating the to-do file with frontmatter
+- STATE.md updates
+- Git commit
 </objective>
 
 <execution_context>
@@ -27,21 +27,21 @@ allowed-tools:
 </execution_context>
 
 <context>
-参数：$ARGUMENTS（可选的待办描述）
+Argument: $ARGUMENTS (optional to-do description)
 
-状态在工作流中通过 `init todos` 和定向读取解析。
+State is resolved inside the workflow via `init todos` and targeted reads.
 </context>
 
 <process>
-**遵循 add-todo 工作流**，来自 `@.opencode/workflows/add-todo.md`。
+**Follow the add-todo workflow** from `@.opencode/workflows/add-todo.md`.
 
-该工作流处理所有逻辑，包括：
-1. 目录确保
-2. 现有领域检查
-3. 内容提取（参数或对话）
-4. 领域推断
-5. 重复检查
-6. 文件创建及 slug 生成
-7. STATE.md 更新
-8. Git 提交
+The workflow handles all the logic, including:
+1. Ensuring the directory exists
+2. Checking existing domains
+3. Content extraction (from arguments or conversation)
+4. Domain inference
+5. Duplicate check
+6. File creation and slug generation
+7. STATE.md update
+8. Git commit
 </process>

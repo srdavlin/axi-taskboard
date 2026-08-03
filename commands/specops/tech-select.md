@@ -1,6 +1,6 @@
 ---
 name: specops:tech-select
-description: 技术选型，推荐技术栈，生成选型报告
+description: Technology selection — recommend a tech stack and generate a selection report
 argument-hint: "[--auto]"
 allowed-tools:
   - Read
@@ -11,27 +11,27 @@ allowed-tools:
 ---
 
 <context>
-**标志：**
-- `--auto` — 自动模式。基于分析结果直接推荐技术栈
+**Flags:**
+- `--auto` — Automatic mode. Recommend the tech stack directly based on the analysis results
 
-**输入：**
-- 上游需求分析、竞品分析、功能分析结果
+**Inputs:**
+- Results from upstream requirements analysis, competitor analysis, and feature analysis
 </context>
 
 <objective>
-通过技术选型流程：
+Run the technology selection process:
 
-**创建：**
-- `.specops/tech-selection.md` — 技术选型报告
-- `.specops/roadmap.md` — 实施路线图
+**Creates:**
+- `.specops/tech-selection.md` — technology selection report
+- `.specops/roadmap.md` — implementation roadmap
 
-**分析内容：**
-- 技术栈推荐
-- 方案对比
-- 风险评估
-- 实施计划
+**Analysis covers:**
+- Tech stack recommendations
+- Option comparison
+- Risk assessment
+- Implementation plan
 
-**此命令之后：** 可运行 `/specops:plan-phase` 开始执行。
+**After this command:** run `/specops:plan-phase` to start execution.
 </objective>
 
 <execution_context>
@@ -39,8 +39,8 @@ allowed-tools:
 </execution_context>
 
 <process>
-1. 接收所有上游分析结果
-2. 调用 tech-selection skill 进行选型
-3. 生成技术选型报告和路线图
-4. 更新状态文件
+1. Receive all upstream analysis results
+2. Invoke the tech-selection skill to perform the selection
+3. Generate the technology selection report and roadmap
+4. Update the state file
 </process>

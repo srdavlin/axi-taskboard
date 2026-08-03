@@ -1,6 +1,6 @@
 ---
 name: specops:map-codebase
-description: 使用并行映射代理分析代码库，生成 .planning/codebase/ 文档
+description: Analyze the codebase using parallel mapping agents and generate .planning/codebase/ documentation
 argument-hint: "[optional: specific area to map, e.g., 'api' or 'auth']"
 allowed-tools:
   - Read
@@ -12,11 +12,11 @@ allowed-tools:
 ---
 
 <objective>
-使用并行的 specops-codebase-mapper 代理分析现有代码库，生成结构化的代码库文档。
+Analyze the existing codebase using parallel specops-codebase-mapper agents to generate structured codebase documentation.
 
-每个映射代理探索一个焦点领域并**直接将文档写入** `.planning/codebase/`。编排器只接收确认信息，保持上下文使用最小化。
+Each mapping agent explores one focus area and **writes its documentation directly to** `.planning/codebase/`. The orchestrator only receives confirmations, keeping context usage minimal.
 
-输出：.planning/codebase/ 文件夹，包含 7 个关于代码库状态的结构化文档。
+Output: a .planning/codebase/ folder containing 7 structured documents about the state of the codebase.
 </objective>
 
 <execution_context>
@@ -24,48 +24,48 @@ allowed-tools:
 </execution_context>
 
 <context>
-焦点领域：$ARGUMENTS（可选 - 如果提供，告诉代理聚焦于特定子系统）
+Focus area: $ARGUMENTS (optional — if provided, tells the agents to focus on a specific subsystem)
 
-**如果存在则加载项目状态：**
-检查 .planning/STATE.md - 如果项目已初始化则加载上下文
+**Load project state if it exists:**
+Check .planning/STATE.md — if the project has already been initialized, load its context
 
-**此命令可以运行于：**
-- `/specops:new-project` 之前（棕地代码库）- 先创建代码库映射
-- `/specops:new-project` 之后（绿地代码库）- 随代码演进更新代码库映射
-- 任何时候刷新代码库理解
+**This command can be run:**
+- Before `/specops:new-project` (brownfield codebase) — create the codebase map first
+- After `/specops:new-project` (greenfield codebase) — update the codebase map as the code evolves
+- Any time to refresh understanding of the codebase
 </context>
 
 <when_to_use>
-**使用 map-codebase 的场景：**
-- 初始化前的棕地项目（先理解现有代码）
-- 重大变更后刷新代码库映射
-- 入门不熟悉的代码库
-- 重大重构前（理解当前状态）
-- 当 STATE.md 引用过时的代码库信息时
+**When to use map-codebase:**
+- A brownfield project before initialization (understand the existing code first)
+- Refreshing the codebase map after a major change
+- Onboarding to an unfamiliar codebase
+- Before a major refactor (understand the current state)
+- When STATE.md references stale codebase information
 
-**跳过 map-codebase 的场景：**
-- 还没有代码的绿地项目（没什么可映射的）
-- 简单的代码库（<5 个文件）
+**When to skip map-codebase:**
+- A greenfield project with no code yet (nothing to map)
+- A simple codebase (<5 files)
 </when_to_use>
 
 <process>
-1. 检查 .planning/codebase/ 是否已存在（提供刷新或跳过选项）
-2. 创建 .planning/codebase/ 目录结构
-3. 生成 4 个并行的 specops-codebase-mapper 代理：
-   - 代理 1：tech 焦点 → 写入 STACK.md、INTEGRATIONS.md
-   - 代理 2：arch 焦点 → 写入 ARCHITECTURE.md、STRUCTURE.md
-   - 代理 3：quality 焦点 → 写入 CONVENTIONS.md、TESTING.md
-   - 代理 4：concerns 焦点 → 写入 CONCERNS.md
-4. 等待代理完成，收集确认（不是文档内容）
-5. 验证所有 7 个文档存在并统计行数
-6. 提交代码库映射
-7. 提供后续步骤（通常：/specops:new-project 或 /specops:plan-phase）
+1. Check whether .planning/codebase/ already exists (offer refresh or skip options)
+2. Create the .planning/codebase/ directory structure
+3. Spawn 4 parallel specops-codebase-mapper agents:
+   - Agent 1: tech focus → writes STACK.md, INTEGRATIONS.md
+   - Agent 2: arch focus → writes ARCHITECTURE.md, STRUCTURE.md
+   - Agent 3: quality focus → writes CONVENTIONS.md, TESTING.md
+   - Agent 4: concerns focus → writes CONCERNS.md
+4. Wait for the agents to finish, collecting confirmations (not document content)
+5. Verify all 7 documents exist and count their lines
+6. Commit the codebase map
+7. Suggest next steps (typically: /specops:new-project or /specops:plan-phase)
 </process>
 
 <success_criteria>
-- [ ] .planning/codebase/ 目录已创建
-- [ ] 所有 7 个代码库文档已由映射代理写入
-- [ ] 文档遵循模板结构
-- [ ] 并行代理无错误完成
-- [ ] 用户知道后续步骤
+- [ ] .planning/codebase/ directory created
+- [ ] All 7 codebase documents written by the mapping agents
+- [ ] Documents follow the template structure
+- [ ] Parallel agents completed without errors
+- [ ] The user knows the next steps
 </success_criteria>

@@ -1,6 +1,6 @@
 ---
 name: specops:list-phase-assumptions
-description: 在规划之前展示 Claude 对阶段方法的假设
+description: Show Claude's assumptions about a phase's approach before planning begins
 argument-hint: "[phase]"
 allowed-tools:
   - Read
@@ -10,10 +10,10 @@ allowed-tools:
 ---
 
 <objective>
-分析一个阶段并展示 Claude 关于技术方法、实现顺序、范围边界、风险领域和依赖关系的假设。
+Analyze a phase and show Claude's assumptions about technical approach, implementation order, scope boundaries, risk areas, and dependencies.
 
-目的：帮助用户在规划开始之前看到 Claude 的想法——在假设错误时尽早纠正。
-输出：仅对话输出（不创建文件）——以"你觉得怎么样？"提示结束
+Purpose: help the user see Claude's thinking before planning starts — so wrong assumptions can be corrected early.
+Output: conversational output only (no files created) — ends with a "What do you think?" prompt
 </objective>
 
 <execution_context>
@@ -21,26 +21,26 @@ allowed-tools:
 </execution_context>
 
 <context>
-阶段编号：$ARGUMENTS（必需）
+Phase number: $ARGUMENTS (required)
 
-项目状态和路线图在工作流中通过定向读取加载。
+Project state and roadmap are loaded inside the workflow via targeted reads.
 </context>
 
 <process>
-1. 验证阶段编号参数（缺失或无效时报错）
-2. 检查阶段是否存在于路线图中
-3. 遵循 list-phase-assumptions.md 工作流：
-   - 分析路线图描述
-   - 展示关于以下方面的假设：技术方法、实现顺序、范围、风险、依赖关系
-   - 清晰展示假设
-   - 提示"你觉得怎么样？"
-4. 收集反馈并提供后续步骤
+1. Validate the phase number argument (error if missing or invalid)
+2. Check that the phase exists in the roadmap
+3. Follow the list-phase-assumptions.md workflow:
+   - Analyze the roadmap description
+   - Show assumptions about: technical approach, implementation order, scope, risk, dependencies
+   - Present the assumptions clearly
+   - Prompt "What do you think?"
+4. Gather feedback and provide next steps
 </process>
 
 <success_criteria>
 
-- 阶段已对照路线图验证
-- 在五个领域展示了假设
-- 已提示用户反馈
-- 用户知道后续步骤（讨论上下文、规划阶段或纠正假设）
+- Phase has been validated against the roadmap
+- Assumptions have been shown across five areas
+- User has been prompted for feedback
+- User knows the next steps (discuss context, plan the phase, or correct assumptions)
   </success_criteria>

@@ -1,111 +1,111 @@
 ---
 name: specops:reapply-patches
-description: 更新后重新应用本地修改
+description: Reapply local modifications after an update
 allowed-tools: Read, Write, Edit, Bash, Glob, Grep, AskUserQuestion
 ---
 
 <purpose>
-SpecOps 更新擦除并重新安装文件后，此命令将用户之前保存的本地修改合并回新版本。使用智能比较处理上游文件也发生变化的情况。
+After a SpecOps update wipes and reinstalls files, this command merges the user's previously saved local modifications back into the new version. Uses smart comparison to handle cases where the upstream file has also changed.
 </purpose>
 
 <process>
 
-## 步骤 1：检测备份的补丁
+## Step 1: Detect backed-up patches
 
-检查本地补丁目录：
+Check the local patches directory:
 
 ```bash
-# 全局安装（路径在安装时模板化）
+# Global install (path is templated at install time)
 PATCHES_DIR=~/.config/opencode/specops-local-patches
-# 本地安装回退
+# Local install fallback
 if [ ! -d "$PATCHES_DIR" ]; then
   PATCHES_DIR=./.opencode/specops-local-patches
 fi
 ```
 
-从补丁目录读取 `backup-meta.json`。
+Read `backup-meta.json` from the patches directory.
 
-**如果未找到补丁：**
+**If no patches are found:**
 ```
-未找到本地补丁。无需重新应用。
+No local patches found. Nothing to reapply.
 
-本地补丁会在你运行 /specops:update 后自动保存
-（如果你修改了任何 SpecOps 工作流、命令或 agent 文件）。
+Local patches are saved automatically after you run /specops:update
+(if you had modified any SpecOps workflow, command, or agent files).
 ```
-退出。
+Exit.
 
-## 步骤 2：展示补丁摘要
+## Step 2: Show the patch summary
 
 ```
-## 待重新应用的本地补丁
+## Local patches to reapply
 
-**备份自：** v{from_version}
-**当前版本：** {读取 VERSION 文件}
-**修改文件数：** {count}
+**Backed up from:** v{from_version}
+**Current version:** {read VERSION file}
+**Files modified:** {count}
 
-| # | 文件 | 状态 |
+| # | File | Status |
 |---|------|------|
-| 1 | {file_path} | 待处理 |
-| 2 | {file_path} | 待处理 |
+| 1 | {file_path} | Pending |
+| 2 | {file_path} | Pending |
 ```
 
-## 步骤 3：合并每个文件
+## Step 3: Merge each file
 
-对 `backup-meta.json` 中的每个文件：
+For each file in `backup-meta.json`:
 
-1. **读取备份版本**（用户修改过的副本，来自 `specops-local-patches/`）
-2. **读取新安装版本**（更新后的当前文件）
-3. **比较并合并：**
+1. **Read the backed-up version** (the user's modified copy, from `specops-local-patches/`)
+2. **Read the freshly installed version** (the updated current file)
+3. **Compare and merge:**
 
-   - 如果新文件与备份文件相同：跳过（修改已被上游合并）
-   - 如果新文件不同：识别用户的修改并应用到新版本
+   - If the new file is identical to the backup: skip (the modification was already merged upstream)
+   - If the new file differs: identify the user's changes and apply them to the new version
 
-   **合并策略：**
-   - 完整读取两个版本
-   - 识别用户添加或修改的部分（寻找新增内容，而非仅路径替换的差异）
-   - 将用户的新增/修改应用到新版本
-   - 如果用户修改的部分上游也发生了变化：标记为冲突，展示两个版本，询问用户保留哪个
+   **Merge strategy:**
+   - Read both versions in full
+   - Identify the sections the user added or modified (look for genuine additions, not just diffs from path substitution)
+   - Apply the user's additions/modifications to the new version
+   - If the section the user modified has also changed upstream: flag it as a conflict, show both versions, and ask the user which to keep
 
-4. **写入合并结果**到安装位置
-5. **报告状态：**
-   - `已合并` — 用户修改已干净应用
-   - `已跳过` — 修改已存在于上游
-   - `冲突` — 用户选择了解决方案
+4. **Write the merged result** to the install location
+5. **Report status:**
+   - `Merged` — the user's changes applied cleanly
+   - `Skipped` — the change was already present upstream
+   - `Conflict` — the user chose a resolution
 
-## 步骤 4：更新清单
+## Step 4: Update the manifest
 
-重新应用后，重新生成文件清单以便未来更新正确检测这些用户修改：
+After reapplying, regenerate the file manifest so future updates correctly detect these user modifications:
 
 ```bash
-# 清单将在下次 /specops:update 时重新生成
-# 现在只记录哪些文件被修改
+# The manifest will be regenerated on the next /specops:update
+# For now, just record which files were modified
 ```
 
-## 步骤 5：清理选项
+## Step 5: Cleanup options
 
-询问用户：
-- "保留补丁备份作为参考？" → 保留 `specops-local-patches/`
-- "清理补丁备份？" → 删除 `specops-local-patches/` 目录
+Ask the user:
+- "Keep the patch backup for reference?" → keep `specops-local-patches/`
+- "Clean up the patch backup?" → delete the `specops-local-patches/` directory
 
-## 步骤 6：报告
+## Step 6: Report
 
 ```
-## 补丁已重新应用
+## Patches reapplied
 
-| # | 文件 | 状态 |
+| # | File | Status |
 |---|------|------|
-| 1 | {file_path} | ✓ 已合并 |
-| 2 | {file_path} | ○ 已跳过（已在上游） |
-| 3 | {file_path} | ⚠ 冲突已解决 |
+| 1 | {file_path} | ✓ Merged |
+| 2 | {file_path} | ○ Skipped (already upstream) |
+| 3 | {file_path} | ⚠ Conflict resolved |
 
-{count} 个文件已更新。你的本地修改已重新激活。
+{count} file(s) updated. Your local modifications are active again.
 ```
 
 </process>
 
 <success_criteria>
-- [ ] 所有备份的补丁已处理
-- [ ] 用户修改已合并到新版本
-- [ ] 冲突已通过用户输入解决
-- [ ] 每个文件的状态已报告
+- [ ] All backed-up patches have been processed
+- [ ] User modifications have been merged into the new versions
+- [ ] Conflicts have been resolved with user input
+- [ ] Status for each file has been reported
 </success_criteria>

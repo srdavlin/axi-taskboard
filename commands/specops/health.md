@@ -1,6 +1,6 @@
 ---
 name: specops:health
-description: 诊断规划目录健康状态并可选修复问题
+description: Diagnose the planning directory's health and optionally repair issues
 argument-hint: "[--repair]"
 allowed-tools:
   - Read
@@ -9,7 +9,7 @@ allowed-tools:
   - AskUserQuestion
 ---
 <objective>
-验证 `.planning/` 目录完整性并报告可操作的问题。检查缺失文件、无效配置、不一致状态和孤立计划。
+Verify the integrity of the `.planning/` directory and report actionable issues. Checks for missing files, invalid config, inconsistent state, and orphaned plans.
 </objective>
 
 <execution_context>
@@ -17,6 +17,6 @@ allowed-tools:
 </execution_context>
 
 <process>
-端到端执行 @.opencode/workflows/health.md 中的健康检查工作流。
-从参数中解析 --repair 标志并传递给工作流。
+Execute the health-check workflow in @.opencode/workflows/health.md end to end.
+Parse the --repair flag from the arguments and pass it to the workflow.
 </process>

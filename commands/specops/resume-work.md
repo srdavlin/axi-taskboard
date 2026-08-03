@@ -1,6 +1,6 @@
 ---
 name: specops:resume-work
-description: 从上一个会话恢复工作，完整恢复上下文
+description: Resume work from the previous session with full context restoration
 allowed-tools:
   - Read
   - Bash
@@ -10,15 +10,15 @@ allowed-tools:
 ---
 
 <objective>
-恢复完整的项目上下文，从上一个会话无缝继续工作。
+Restore full project context to seamlessly continue work from the previous session.
 
-路由到 resume-project 工作流，该工作流处理：
+Routes to the resume-project workflow, which handles:
 
-- STATE.md 加载（或缺失时重建）
-- 检查点检测（.continue-here 文件）
-- 未完成工作检测（有 PLAN 但无 SUMMARY）
-- 状态展示
-- 上下文感知的下一步操作路由
+- STATE.md loading (or rebuilding if missing)
+- Checkpoint detection (.continue-here file)
+- Unfinished-work detection (a PLAN exists but no SUMMARY)
+- Status display
+- Context-aware routing to the next action
   </objective>
 
 <execution_context>
@@ -26,15 +26,15 @@ allowed-tools:
 </execution_context>
 
 <process>
-**遵循 resume-project 工作流**，来自 `@.opencode/workflows/resume-project.md`。
+**Follow the resume-project workflow**, from `@.opencode/workflows/resume-project.md`.
 
-该工作流处理所有恢复逻辑，包括：
+That workflow handles all the resume logic, including:
 
-1. 项目存在性验证
-2. STATE.md 加载或重建
-3. 检查点和未完成工作检测
-4. 可视化状态展示
-5. 上下文感知的选项提供（在建议 plan 还是 discuss 之前检查 CONTEXT.md）
-6. 路由到适当的下一个命令
-7. 会话连续性更新
+1. Project-existence verification
+2. STATE.md loading or rebuilding
+3. Checkpoint and unfinished-work detection
+4. Visual status display
+5. Context-aware option presentation (check CONTEXT.md before suggesting plan vs. discuss)
+6. Routing to the appropriate next command
+7. Session-continuity updates
    </process>

@@ -1,6 +1,6 @@
 ---
 name: specops:insert-phase
-description: 将紧急工作作为小数阶段（如 72.1）插入到现有阶段之间
+description: Insert urgent work as a decimal phase (e.g. 72.1) between existing phases
 argument-hint: <after> <description>
 allowed-tools:
   - Read
@@ -9,11 +9,11 @@ allowed-tools:
 ---
 
 <objective>
-为里程碑中期发现的紧急工作插入一个小数阶段，该工作必须在现有整数阶段之间完成。
+Insert a decimal phase for urgent work discovered mid-milestone that must be completed between existing integer phases.
 
-使用小数编号（72.1、72.2 等）来保留计划阶段的逻辑顺序，同时容纳紧急插入。
+Use decimal numbering (72.1, 72.2, etc.) to preserve the logical order of planned phases while accommodating urgent insertions.
 
-目的：处理执行期间发现的紧急工作，无需重新编号整个路线图。
+Purpose: handle urgent work discovered during execution without renumbering the entire roadmap.
 </objective>
 
 <execution_context>
@@ -21,12 +21,12 @@ allowed-tools:
 </execution_context>
 
 <context>
-参数：$ARGUMENTS（格式：<after-phase-number> <description>）
+Arguments: $ARGUMENTS (format: <after-phase-number> <description>)
 
-路线图和状态在工作流中通过 `init phase-op` 和定向工具调用解析。
+The roadmap and state are resolved inside the workflow via `init phase-op` and targeted tool calls.
 </context>
 
 <process>
-端到端执行 @.opencode/workflows/insert-phase.md 中的 insert-phase 工作流。
-保留所有验证门控（参数解析、阶段验证、小数计算、路线图更新）。
+Execute the insert-phase workflow in @.opencode/workflows/insert-phase.md end to end.
+Preserve all validation gates (argument parsing, phase validation, decimal calculation, roadmap update).
 </process>
